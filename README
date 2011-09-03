@@ -1,0 +1,40 @@
+Not Another Programming Language
+================================
+
+What is it?
+-----------
+
+Not Another Programming Language (NAPL) is a simple, high level domain specific
+language for defining pure functions, with a platform independant binary format
+for sending functions between systems. NAPL is not and does not attempt to be
+a general purpose programming language - it is intended to be used where
+business logic needs to be communicated between multiple systems, possibly
+running on different.
+
+But, what is it for?
+--------------------
+
+NAPL is intended to be used as an alternative to RPC to reduce resource usage
+and boost performance. For example, instead of a web browser sending an AJAX
+request back to a server to perform sorting and filtering operations, the server
+could have sent a NAPL function, generated on whatever platform the server
+happens to be using, that will safely be evaluated locally in the web browser.
+
+The nature of NAPL makes it safe to use even between partially trusted systems.
+Functions defined in NAPL are guaranteed to be pure functions that cannot read
+or affect state when evaluated. NAPL functions are also guaranteed
+to terminate with a result in a timely manner, as it intentionally does not
+include generic looping or recursion constructs, making it safe to use even
+in single threaded applications such as JavaScript, as well as performance
+critical applications such as servers.
+
+What's in the box?
+------------------
+
+NAPL includes an API for defining functions, a compact binary serialization
+format based on Google Protocol Buffers for sending functions across networks
+or persist for later use, and a compiler for converting NAPL functions to
+efficient platform native functions.
+
+NAPL is currently implemented for the .NET platform only, with plans to support
+Java and JavaScript.
