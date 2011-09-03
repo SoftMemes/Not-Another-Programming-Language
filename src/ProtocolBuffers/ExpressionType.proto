@@ -1,0 +1,12 @@
+enum ExpressionType
+{
+    ValueExpression = 1;
+    ParameterExpression = 2;
+    LetExpression = 3;
+    MatchExpression = 4;
+    FunctionExpression = 5;
+    CallExpression = 6;
+    TupleExpression = 7;
+    CollectionExpression = 8;
+    OperatorExpression = 9;
+}

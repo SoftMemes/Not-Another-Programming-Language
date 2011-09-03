@@ -1,0 +1,32 @@
+enum Operator
+{
+    // Equality
+    EqualsOperator = 1;
+    NotEqualsOperator = 2;
+    // Ordering
+    LessThanOperator = 3;
+    LessThanEqualsOperator = 4;
+    GreaterThanOperator = 5;
+    GreaterThanEqualsOperator = 6;
+    // Logic
+    NotOperator = 7;
+    AndOperator = 8;
+    OrOperator = 9;
+    // Numeric
+    NegateOperator = 10;
+    AddOperator = 11;
+    SubtractOperator = 12;
+    MultiplyOperator = 13;
+    DivideOperator = 14;
+    // Collections
+    AppendOperator = 15;
+    RemoveOperator = 16;
+    UnionOperator = 17;
+    MinusOperator = 18;
+    ZipOperator = 19;
+    ContainsOperator = 20;
+    LookupOperator = 21;
+    FoldOperator = 22;
+    // Control flow
+    IfOperator = 23;
+}
