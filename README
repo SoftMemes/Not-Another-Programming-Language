@@ -9,7 +9,7 @@ language for defining pure functions, with a platform independant binary format
 for sending functions between systems. NAPL is not and does not attempt to be
 a general purpose programming language - it is intended to be used where
 business logic needs to be communicated between multiple systems, possibly
-running on different.
+running on different platforms.
 
 But, what is it for?
 --------------------
