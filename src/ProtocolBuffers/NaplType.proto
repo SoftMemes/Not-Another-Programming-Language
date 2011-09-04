@@ -13,6 +13,6 @@ enum NaplValueKind
 
 message NaplType
 {
-	required NaplValueKind Kind = 1;
-	repeated NaplType SubTypes = 2;
+	required NaplValueKind kind = 1;
+	repeated NaplType sub_types = 2;
 }

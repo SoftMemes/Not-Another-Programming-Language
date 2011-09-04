@@ -38,20 +38,31 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\FSharp\2.0\Runtime\v4.0\FSharp.Core.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.1.0.0.280\lib\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SoftMemes.Napl.Serialization\SoftMemes.Napl.Serialization.csproj">
+      <Project>{78AE1A08-DBE7-4E21-80C1-4700D049A891}</Project>
+      <Name>SoftMemes.Napl.Serialization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SoftMemes.Napl\SoftMemes.Napl.fsproj">
       <Project>{DEDB48D4-E555-4B67-9C5F-26AAF1FD2356}</Project>
       <Name>SoftMemes.Napl</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

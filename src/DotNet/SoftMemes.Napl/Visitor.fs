@@ -12,7 +12,7 @@ let visit f state (TaggedNaplExpression (_,expr)) =
     | MatchExpression (ps, expr, inExpr) ->
         f state expr
         f state inExpr
-    | FunctionExpression (param, expr) ->
+    | LambdaExpression (param, expr) ->
         f state expr
     | CallExpression (funcExpr, paramExprs) ->
         f state funcExpr

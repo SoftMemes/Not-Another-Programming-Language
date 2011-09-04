@@ -135,7 +135,7 @@ let rec private compile env (TaggedNaplExpression ((t,_),expr)) : LinqExpression
             nativeT,
             List.toSeq nativeParams,
             List.concat [[tempAssign];nativeAssigns;[nativeInExpr]])
-    | FunctionExpression (ps, expr) ->
+    | LambdaExpression (ps, expr) ->
         let nativeParams = ps |> List.map getNativeParam
         let nativeParamTs = ps |> List.map (fun (Parameter (t,_)) -> getNativeType t) 
         let env' =

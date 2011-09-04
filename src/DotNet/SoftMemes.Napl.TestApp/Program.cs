@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using SoftMemes.Napl.Language;
+using System.IO;
 
 namespace SoftMemes.Napl.TestApp
 {
@@ -38,6 +39,13 @@ namespace SoftMemes.Napl.TestApp
 
             var func = (Func<int, int, string>)((LambdaExpression)ec).Compile();
             Console.WriteLine("Result: {0}", func(42, 52));
+
+            var serialization = Serializer.Serialize(et);
+            Console.WriteLine("Serialization: {0}", serialization);
+
+            var stream = new MemoryStream();
+            ProtoBuf.Serializer.Serialize<Serialization.Expression>(stream, serialization);
+
             Console.ReadLine();
         }
     }

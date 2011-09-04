@@ -29,7 +29,7 @@ let rec private referenceCheck env (expr' & TaggedNaplExpression (_,expr)) =
     | MatchExpression (ps, expr, inExpr) ->
         let env' = Set.union env (Set.ofList ps)
         ExpressionVisitor.visit referenceCheck env' expr
-    | FunctionExpression (ps, expr) ->
+    | LambdaExpression (ps, expr) ->
         let env' = Set.union env (Set.ofList ps)
         ExpressionVisitor.visit referenceCheck env' expr
     | _ -> ExpressionVisitor.visit referenceCheck env expr'
@@ -157,9 +157,9 @@ let rec private typeCheck (TaggedNaplExpression (tag, expr)) =
             typeError <| sprintf "Type list %A doesn't match expected %A" ts' ts
         | ts, t ->
             typeError <| sprintf "Match expects a tuple but found %A" t
-    | FunctionExpression (param, expr) ->
+    | LambdaExpression (param, expr) ->
         let exprT, expr' = typeCheck' expr
-        ret exprT (FunctionExpression (param, expr'))
+        ret exprT (LambdaExpression (param, expr'))
     | CallExpression (funcExpr, paramExprs) ->
         let funcT, funcExpr' = typeCheck' funcExpr
         let paramTs, paramExprs' = paramExprs |> List.map typeCheck' |> List.unzip

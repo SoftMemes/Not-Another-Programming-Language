@@ -1,10 +1,11 @@
 import "ExpressionType.proto";
 import "NaplType.proto";
 import "Parameter.proto";
+import "Operator.proto";
 
 message Expression
 {
-	required ExpressionType ExpressionType = 1;
+	required ExpressionType expression_type = 1;
 	repeated NaplValueKind value_kind_operands = 2;
 	repeated NaplType value_type_operands = 3;
 	repeated bool boolean_operands = 4;
@@ -14,4 +15,5 @@ message Expression
 	repeated Parameter parameter_operands = 8;
 	repeated int32 parameter_reference_operands = 9;
 	repeated Expression expression_operands = 10;
+	repeated Operator operator_operands = 11;
 }

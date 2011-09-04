@@ -72,7 +72,7 @@ and
     | ParameterExpression of Parameter
     | LetExpression of Parameter * 'a TaggedNaplExpression * 'a TaggedNaplExpression
     | MatchExpression of Parameter list * 'a TaggedNaplExpression * 'a TaggedNaplExpression
-    | FunctionExpression of Parameter list * 'a TaggedNaplExpression
+    | LambdaExpression of Parameter list * 'a TaggedNaplExpression
     | CallExpression of 'a TaggedNaplExpression * 'a TaggedNaplExpression list
     | CollectionExpression of NaplType * 'a TaggedNaplExpression list
     | OperatorExpression of Operator * 'a TaggedNaplExpression list

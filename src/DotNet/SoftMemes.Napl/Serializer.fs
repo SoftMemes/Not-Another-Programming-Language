@@ -1,9 +1,10 @@
 ﻿module  SoftMemes.Napl.Serializer
 
+open SoftMemes.Functional
 open SoftMemes.Napl
 open SoftMemes.Napl.Language
 
-let serializerOperator =
+let private serializeOperator =
     function
     | EqualsOperator -> Serialization.Operator.EqualsOperator
     | NotEqualsOperator -> Serialization.Operator.NotEqualsOperator
@@ -29,7 +30,7 @@ let serializerOperator =
     | FoldOperator -> Serialization.Operator.FoldOperator
     | IfOperator -> Serialization.Operator.IfOperator
 
-let deserializerOperator =
+let private deserializeOperator =
     function
     | Serialization.Operator.EqualsOperator -> EqualsOperator
     | Serialization.Operator.NotEqualsOperator -> NotEqualsOperator
@@ -56,11 +57,59 @@ let deserializerOperator =
     | Serialization.Operator.IfOperator -> IfOperator
     | invalidOpr -> invalidArg "operator" (sprintf "Unsupported value: %A" invalidOpr)
 
-let rec serialize (TaggedNaplExpression (_, expr)) =
+let rec private serializeNaplType t =
+    let res = Serialization.NaplType()
+    match t with
+    | BooleanType -> res.kind <- Serialization.NaplValueKind.BooleanKind
+    | StringType -> res.kind <- Serialization.NaplValueKind.StringKind
+    | IntegerType -> res.kind <- Serialization.NaplValueKind.IntegerKind
+    | FloatType -> res.kind <- Serialization.NaplValueKind.FloatKind
+    | TupleType ts ->
+        res.kind <- Serialization.NaplValueKind.TupleKind
+        res.sub_types.AddRange(ts |> List.map serializeNaplType)
+    | ListType t ->
+        res.kind <- Serialization.NaplValueKind.ListKind
+        res.sub_types.Add(serializeNaplType t)
+    | SetType t ->
+        res.kind <- Serialization.NaplValueKind.SetKind
+        res.sub_types.Add(serializeNaplType t)
+    | MapType (tk, tv) ->
+        res.kind <- Serialization.NaplValueKind.MapKind
+        res.sub_types.Add(serializeNaplType tk)
+        res.sub_types.Add(serializeNaplType tv)
+    | FunctionType (ts, t) ->
+        res.kind <- Serialization.NaplValueKind.FunctionKind
+        res.sub_types.Add(serializeNaplType t)
+        res.sub_types.AddRange(ts |> List.map serializeNaplType)
+    res
+
+let private serializeParameter (Parameter(pt, name)) pi =
+    let res = Serialization.Parameter()
+    res.param_type <- serializeNaplType pt
+    res.id <- pi
+    res.name <- name
+    res
+
+let private lookupParam env p = let (l,_) = env in Map.find p l
+let private rememberParam env p =
+    let (l,i) = env
+    let i' = 1 + i
+    Map.add p i' l, i'
+
+let private serializeParameters env ps =
+    let envs = ps |> List.scan rememberParam env |> List.tail
+    let env' = envs |> List.rev |> List.head
+    let pis = envs |> List.map snd
+    let paramMsgs =
+        List.zip ps pis
+        |> List.map (uncurry serializeParameter)
+    env', paramMsgs
+
+let rec private serialize env (TaggedNaplExpression (_, expr)) =
     let res = Serialization.Expression()
     match expr with
     | ValueExpression value ->
-        res.ExpressionType <- Serialization.ExpressionType.ValueExpression
+        res.expression_type <- Serialization.ExpressionType.ValueExpression
         match value with
         | BooleanValue v ->
             res.value_kind_operands.Add(Serialization.NaplValueKind.BooleanKind)
@@ -74,3 +123,43 @@ let rec serialize (TaggedNaplExpression (_, expr)) =
         | StringValue v ->
             res.value_kind_operands.Add(Serialization.NaplValueKind.StringKind)
             res.string_operands.Add(v)
+    | TupleExpression exprs ->
+        res.expression_type <- Serialization.ExpressionType.TupleExpression
+        res.expression_operands.AddRange(exprs |> List.map (serialize env))
+    | ParameterExpression (param & Parameter(t, name))->
+        let paramIdx = lookupParam env param
+        res.expression_type <- Serialization.ExpressionType.ParameterExpression
+        res.parameter_reference_operands.Add(paramIdx)
+    | LetExpression (param, expr, inExpr) ->
+        let (env' & (_, pi)) = rememberParam env param
+        let paramMsg = serializeParameter param pi
+        res.expression_type <- Serialization.ExpressionType.LetExpression
+        res.parameter_operands.Add(paramMsg)
+        res.expression_operands.Add(serialize env' inExpr)
+        res.expression_operands.Add(serialize env expr)
+    | MatchExpression (ps, expr, inExpr) ->
+        let env', paramMsgs = serializeParameters env ps
+        res.expression_type <- Serialization.ExpressionType.MatchExpression
+        res.parameter_operands.AddRange(paramMsgs)
+        res.expression_operands.Add(serialize env' inExpr)
+        res.expression_operands.Add(serialize env expr)
+    | LambdaExpression (ps, expr) ->
+        let env', paramMsgs = serializeParameters env ps
+        res.expression_type <- Serialization.ExpressionType.LambdaExpression
+        res.parameter_operands.AddRange(paramMsgs)
+        res.expression_operands.Add(serialize env' expr)
+    | CallExpression (fExpr, pExprs) ->
+        res.expression_type <- Serialization.ExpressionType.CallExpression
+        res.expression_operands.Add(serialize env fExpr)
+        res.expression_operands.AddRange(pExprs |> List.map (serialize env))
+    | CollectionExpression (t, exprs) ->
+        res.expression_type <- Serialization.ExpressionType.CollectionExpression
+        res.value_type_operands.Add(serializeNaplType t)
+        res.expression_operands.AddRange(exprs |> List.map (serialize env))
+    | OperatorExpression (opr, exprs) ->
+        res.expression_type <- Serialization.ExpressionType.CollectionExpression
+        res.operator_operands.Add(serializeOperator opr)
+        res.expression_operands.AddRange(exprs |> List.map (serialize env))
+    res
+
+let Serialize e = serialize (Map.empty, 0) e
