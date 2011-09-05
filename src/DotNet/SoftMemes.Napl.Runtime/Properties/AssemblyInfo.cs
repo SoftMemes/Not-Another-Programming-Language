@@ -3,4 +3,4 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
-[assembly: Guid("7e545ce5-3df7-4a94-9832-d9c76cfb5984")]
+[assembly: Guid("5a2a7154-f23f-4d71-aaa7-d6ffb6a2f3b1")]

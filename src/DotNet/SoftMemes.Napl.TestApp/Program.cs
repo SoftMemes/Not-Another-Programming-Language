@@ -29,7 +29,7 @@ namespace SoftMemes.Napl.TestApp
             var et = Validator.TypeCheck(e);
             Console.WriteLine(
                 "Type checked expression: {0}",
-                PrettyPrinter.PrintExpression(e));
+                PrettyPrinter.PrintExpression(et));
 
             var ec = Compiler.Compile(et);
             Console.WriteLine("Compiled expression: {0}", ec);

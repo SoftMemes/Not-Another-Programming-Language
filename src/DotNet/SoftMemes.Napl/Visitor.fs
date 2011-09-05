@@ -2,24 +2,16 @@
 
 open SoftMemes.Napl.Language
 
-let visit f state (TaggedNaplExpression (_,expr)) =
+let visit f state (NaplExpression (_,expr)) =
     match expr with
-    | ValueExpression _ -> ()
-    | ParameterExpression _ -> ()
-    | LetExpression (param, expr, inExpr) ->
-        f state expr
-        f state inExpr
-    | MatchExpression (ps, expr, inExpr) ->
-        f state expr
-        f state inExpr
     | LambdaExpression (param, expr) ->
         f state expr
-    | CallExpression (funcExpr, paramExprs) ->
-        f state funcExpr
-        paramExprs |> List.iter (f state)
-    | TupleExpression exprs ->
+    | ValueExpression _ -> ()
+    | ParameterExpression _ -> ()
+    | OperatorExpression (opr, exprs) ->
         exprs |> List.iter (f state)
     | CollectionExpression (t, exprs) ->
         exprs |> List.iter (f state)
-    | OperatorExpression (opr, exprs) ->
+    | ApplyExpression (funcExpr, exprs) ->
+        f state funcExpr
         exprs |> List.iter (f state)

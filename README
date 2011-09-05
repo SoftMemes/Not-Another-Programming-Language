@@ -24,8 +24,8 @@ The nature of NAPL makes it safe to use even between partially trusted systems.
 Functions defined in NAPL are guaranteed to be pure functions that cannot read
 or affect state when evaluated. NAPL functions are also guaranteed
 to terminate with a result in a timely manner, as it intentionally does not
-include generic looping or recursion constructs, making it safe to use even
-in single threaded applications such as JavaScript, as well as performance
+include generic looping or recursion constructs. This makes it safe to use even
+in single threaded environments such as JavaScript, as well as performance
 critical applications such as servers.
 
 What's in the box?

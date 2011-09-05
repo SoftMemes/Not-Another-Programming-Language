@@ -2,6 +2,6 @@
 
 open SoftMemes.Napl.Language
 
-let PrintExpression (e : TaggedNaplExpression<_>) = sprintf "%A" e
+let PrintExpression (e : NaplExpression<_>) = sprintf "%A" e
 
 

@@ -4,8 +4,10 @@ open System
 open System.Reflection
 open System.Linq.Expressions
 open SoftMemes.Functional
+open SoftMemes.Napl
 open SoftMemes.Napl.Language
 open SoftMemes.Napl.LanguageSugar
+open SoftMemes.Napl.Runtime
 type LinqExpression = System.Linq.Expressions.Expression
 
 let private createTupleType =
@@ -50,13 +52,13 @@ let rec private getNativeType = function
     | TupleType ts ->
         let nativeTs = List.map getNativeType ts
         createTupleType nativeTs
-    | ListType t ->
+    | CollectionType(ListType t) ->
         let nativeT = getNativeType t
         typeof<List<_>>.MakeGenericType(nativeT)
-    | SetType t ->
+    | CollectionType(SetType t) ->
         let nativeT = getNativeType t
         typeof<Set<_>>.MakeGenericType(nativeT)
-    | MapType (tkey, tvalue) ->
+    | CollectionType(MapType (tkey, tvalue)) ->
         let nativeTKey = getNativeType tkey
         let nativeTValue = getNativeType tvalue
         typeof<Map<_,_>>.MakeGenericType(nativeTKey, nativeTValue)
@@ -89,52 +91,14 @@ let rec private getTupleItemNative (pe : ParameterExpression) i tupleT =
     let propertyInfo = pe.Type.GetProperty(propertyName)
     Expression.Property(pe, propertyInfo)    
 
-let private getType (TaggedNaplExpression ((t,_),_)) = t
+let private getRuntimeHelper =
+    let helperT = typeof<RuntimeFunctions>
+    fun methodName argts -> helperT.GetMethod(methodName, (argts : Type[]))
 
-let rec private compile env (TaggedNaplExpression ((t,_),expr)) : LinqExpression =
+let private getType (NaplExpression ((t,_),_)) = t
+
+let rec private compile env (NaplExpression ((t,_),expr)) : LinqExpression =
     match expr with
-    | ValueExpression value ->
-        match value with
-        | BooleanValue v -> upcast Expression.Constant(v)
-        | IntegerValue v -> upcast Expression.Constant(v)
-        | FloatValue v -> upcast Expression.Constant(v)
-        | StringValue v -> upcast Expression.Constant(v)
-    | ParameterExpression p ->
-        upcast Map.find p env
-    | LetExpression (param, expr, inExpr) ->
-        let nativeExpr = compile env expr
-        let nativeParam = getNativeParam param
-        let env' = Map.add param nativeParam env
-        let nativeAssign = Expression.Assign(nativeParam, nativeExpr) :> Expression
-        let nativeInExpr = compile env' inExpr
-        let nativeT = getNativeType t
-        upcast Expression.Block(
-            nativeT,
-            [|nativeParam|],
-            [|nativeAssign;nativeInExpr|])
-    | MatchExpression (ps, expr, inExpr) ->
-        let nativeExpr = compile env expr
-        let (tupleT & TupleType ts) = getType expr
-        let nativeTupleT = ts |> List.map getNativeType |> createTupleType
-        let tempParam = Expression.Parameter(nativeTupleT)
-        let tempAssign = Expression.Assign(tempParam, nativeExpr) :> Expression
-
-        let nativeParams = tempParam :: (ps |> List.map getNativeParam)
-        let nativeExtracts =
-            nativeParams
-            |> List.mapi (getTupleItemNative tempParam)
-        let nativeAssigns =
-            List.zip nativeParams nativeExtracts
-            |> List.map (fun (p,e) -> Expression.Assign(p, e) :> Expression)
-        let env' =
-            List.zip ps nativeParams
-            |> List.fold (fun e (k,v) -> Map.add k v e) env            
-        let nativeInExpr = compile env' inExpr
-        let nativeT = getNativeType t
-        upcast LinqExpression.Block(
-            nativeT,
-            List.toSeq nativeParams,
-            List.concat [[tempAssign];nativeAssigns;[nativeInExpr]])
     | LambdaExpression (ps, expr) ->
         let nativeParams = ps |> List.map getNativeParam
         let nativeParamTs = ps |> List.map (fun (Parameter (t,_)) -> getNativeType t) 
@@ -145,20 +109,19 @@ let rec private compile env (TaggedNaplExpression ((t,_),expr)) : LinqExpression
         let nativeExpr = compile env' expr
         let nativeFunType = createFuncType nativeParamTs nativeT
         upcast LinqExpression.Lambda(nativeFunType, nativeExpr, nativeParams)
-    | CallExpression (funcExpr, paramsExpr) ->
-        let nativeFuncExpr = compile env funcExpr
-        let nativeParams = paramsExpr |> List.map (compile env)
-        upcast LinqExpression.Invoke(nativeFuncExpr, nativeParams)
-    | TupleExpression exprs ->
-        let nativeExprs = exprs |> List.map (compile env)
-        let nativeTs = exprs |> List.map (getType >> getNativeType)
-        let nativeTupleT = createTupleType nativeTs
-        let nativeCInfo = nativeTupleT.GetConstructor(List.toArray nativeTs)
-        upcast LinqExpression.New(nativeCInfo, nativeExprs)        
+    | ValueExpression value ->
+        match value with
+        | BooleanValue v -> upcast Expression.Constant(v)
+        | IntegerValue v -> upcast Expression.Constant(v)
+        | FloatValue v -> upcast Expression.Constant(v)
+        | StringValue v -> upcast Expression.Constant(v)
+    | ParameterExpression p ->
+        upcast Map.find p env
+    | OperatorExpression (opr, exprs) ->
+        compileOperator env t opr exprs
     | CollectionExpression (t, exprs) ->
-        let (CollectionType t') = t
         let nativeExprs = exprs |> List.map (compile env)
-        let nativeItemT = getNativeType t'
+        let nativeItemT = getNativeType (CollectionType t)
         let nativeCtor =
             match t with
             | ListType _ -> initCollection "List" nativeItemT
@@ -166,12 +129,37 @@ let rec private compile env (TaggedNaplExpression ((t,_),expr)) : LinqExpression
             | MapType _ -> initCollection "Map" nativeItemT
         let nativeArray = Expression.NewArrayInit(nativeItemT, nativeExprs)
         upcast LinqExpression.Call(nativeCtor, nativeArray)
-    | OperatorExpression (opr, exprs) -> compileOperator env t opr exprs
+    | ApplyExpression (funcExpr, paramsExpr) ->
+        let nativeFuncExpr = compile env funcExpr
+        let nativeParams = paramsExpr |> List.map (compile env)
+        upcast LinqExpression.Invoke(nativeFuncExpr, nativeParams)
 and
     private compileOperator env t opr exprs : LinqExpression =
         let exprTs = exprs |> List.map getType
         let nativeTs = exprTs |> List.map getNativeType
         match opr, exprs with
+        | TupleOperator, exprs ->
+            let nativeExprs = exprs |> List.map (compile env)
+            let nativeTs = exprs |> List.map (getType >> getNativeType)
+            let nativeTupleT = createTupleType nativeTs
+            let nativeCInfo = nativeTupleT.GetConstructor(List.toArray nativeTs)
+            upcast LinqExpression.New(nativeCInfo, nativeExprs)        
+        | CurryOperator, [fExpr] ->
+            let (FunctionType (ts, tret)) = t
+            let nativeTret = getNativeType tret
+            let nativeParam = getNativeType (TupleType ts)
+            let nativeInT = createFuncType [nativeParam] nativeTret
+            let nativeCurry = getRuntimeHelper "Curry" [|nativeInT|]
+            let nativeF = compile env fExpr
+            upcast LinqExpression.Call(nativeCurry, nativeF)
+        | UncurryOperator, [fExpr] ->
+            let (FunctionType ([TupleType ts], tret)) = t
+            let nativeTret = getNativeType tret
+            let nativeParams = ts |> List.map getNativeType
+            let nativeInT = createFuncType nativeParams nativeTret
+            let nativeUncurry = getRuntimeHelper "Uncurry" [|nativeInT|]
+            let nativeF = compile env fExpr
+            upcast LinqExpression.Call(nativeUncurry, nativeF)
         | BinaryOperator, [leftExpr;rightExpr] ->
             let nativeLeftExpr = compile env leftExpr
             let nativeRightExpr = compile env rightExpr
@@ -208,5 +196,19 @@ and
             upcast LinqExpression.Condition(
                 nativeCondExpr, nativeTrueExpr, nativeFalseExpr, nativeT)
     // TODO: Implement other operators ...
+
+
+//        | LetExpression (param, expr, inExpr) ->
+//        let nativeExpr = compile env expr
+//        let nativeParam = getNativeParam param
+//        let env' = Map.add param nativeParam env
+//        let nativeAssign = Expression.Assign(nativeParam, nativeExpr) :> Expression
+//        let nativeInExpr = compile env' inExpr
+//        let nativeT = getNativeType t
+//        upcast Expression.Block(
+//            nativeT,
+//            [|nativeParam|],
+//            [|nativeAssign;nativeInExpr|])
+//    | MatchExpression (ps, expr, inExpr) ->
 
 let Compile e = compile Map.empty e

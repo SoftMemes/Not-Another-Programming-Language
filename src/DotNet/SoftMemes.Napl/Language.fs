@@ -8,10 +8,12 @@ type NaplType
     | IntegerType
     | FloatType
     | TupleType of NaplType list
-    | ListType of NaplType
+    | FunctionType of NaplType list * NaplType
+    | CollectionType of NaplCollectionType
+and NaplCollectionType
+    = ListType of NaplType
     | SetType of NaplType
     | MapType of NaplType * NaplType
-    | FunctionType of NaplType list * NaplType
 
 [<CustomEquality>]
 [<CustomComparison>]
@@ -28,8 +30,10 @@ type Value
     | StringValue of string
 
 type Operator
+    // Control flow
+    = ConditionOperator
     // Equality
-    = EqualsOperator
+    | EqualsOperator
     | NotEqualsOperator
     // Ordering
     | LessThanOperator
@@ -46,6 +50,10 @@ type Operator
     | SubtractOperator
     | MultiplyOperator
     | DivideOperator
+    // Tuples
+    | TupleOperator
+    | CurryOperator
+    | UncurryOperator
     // Collections
     | AppendOperator
     | RemoveOperator
@@ -55,26 +63,14 @@ type Operator
     | ContainsOperator
     | LookupOperator
     | FoldOperator
-    // Control flow
-    | IfOperator
 
-type 
-    [<StructuralEquality>]
-    [<StructuralComparison>]
-    'a TaggedNaplExpression when 'a : comparison
-    = TaggedNaplExpression of ('a * 'a NaplExpression)
-and 
-    [<StructuralEquality>]
-    [<StructuralComparison>]
-    'a NaplExpression when 'a : comparison
-    = ValueExpression of Value
-    | TupleExpression of 'a TaggedNaplExpression list
+[<StructuralEquality>]
+[<StructuralComparison>]
+type NaplExpression<'t> = NaplExpression of 't * NaplExpression'<'t>
+and NaplExpression'<'t>
+    = LambdaExpression of Parameter list * NaplExpression<'t>
+    | ValueExpression of Value
     | ParameterExpression of Parameter
-    | LetExpression of Parameter * 'a TaggedNaplExpression * 'a TaggedNaplExpression
-    | MatchExpression of Parameter list * 'a TaggedNaplExpression * 'a TaggedNaplExpression
-    | LambdaExpression of Parameter list * 'a TaggedNaplExpression
-    | CallExpression of 'a TaggedNaplExpression * 'a TaggedNaplExpression list
-    | CollectionExpression of NaplType * 'a TaggedNaplExpression list
-    | OperatorExpression of Operator * 'a TaggedNaplExpression list
-
-
+    | OperatorExpression of Operator * NaplExpression<'t> list
+    | CollectionExpression of NaplCollectionType * NaplExpression<'t> list
+    | ApplyExpression of NaplExpression<'t> * NaplExpression<'t> list

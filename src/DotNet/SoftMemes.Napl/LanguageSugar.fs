@@ -2,19 +2,48 @@
 
 open SoftMemes.Napl.Language
 
-let (|NumericType|CollectionType|OtherType|) t =
-    match t with
+let (|NumericType|_|) =
+    function
     | IntegerType
-    | FloatType -> NumericType
-    | StringType
-    | BooleanType
-    | TupleType _ -> OtherType
-    | ListType t 
-    | SetType t -> CollectionType t
-    | MapType (tk, tv) -> CollectionType (TupleType [tk;tv])
+    | FloatType -> Some ()
+    | _ -> None
 
-let (|EqualityOperator|OrderingOperator|LogicOperator|NumericOperator|CollectionOperator|ControlFlowOperator|) opr =
+let (|CollectionOfType|_|) =
+    function
+    | CollectionType (ListType t) -> Some t
+    | CollectionType (SetType t) -> Some t
+    | CollectionType (MapType (tk, tv)) -> Some (TupleType [tk;tv])
+    | _ -> None
+
+let (|ListOfType|_|) =
+    function
+    | CollectionType (ListType t) -> Some t
+    | _ -> None
+
+let (|SetOfType|_|) =
+    function
+    | CollectionType (SetType t) -> Some t
+    | _ -> None
+
+let (|MapOfType|_|) =
+    function
+    | CollectionType (MapType (tk, tv)) -> Some (tk, tv)
+    | _ -> None
+
+let (|MapOfKeyType|_|) =
+    function
+    | CollectionType (MapType (tk, _)) -> Some tk
+    | _ -> None
+
+let (|CollectionTypeOf|) =
+    function
+    | ListType t
+    | SetType t -> t
+    | MapType (tk, tv) -> TupleType [tk;tv]
+
+let (|ControlFlowOperator|EqualityOperator|OrderingOperator|LogicOperator|NumericOperator|TupleOperator|CollectionOperator|) opr =
     match opr with
+    | ConditionOperator -> ControlFlowOperator
     | EqualsOperator
     | NotEqualsOperator -> EqualityOperator
     | LessThanOperator
@@ -29,6 +58,9 @@ let (|EqualityOperator|OrderingOperator|LogicOperator|NumericOperator|Collection
     | SubtractOperator
     | MultiplyOperator
     | DivideOperator -> NumericOperator
+    | TupleOperator
+    | CurryOperator
+    | UncurryOperator -> TupleOperator
     | AppendOperator
     | RemoveOperator
     | UnionOperator
@@ -37,12 +69,12 @@ let (|EqualityOperator|OrderingOperator|LogicOperator|NumericOperator|Collection
     | ContainsOperator
     | LookupOperator
     | FoldOperator -> CollectionOperator
-    | IfOperator -> ControlFlowOperator
 
-let (|UnaryOperator|BinaryOperator|TrinaryOperator|) opr =
-    match opr with
+let (|UnaryOperator|BinaryOperator|TrinaryOperator|) =
+    function
     | NotOperator
-    | NegateOperator -> UnaryOperator
+    | NegateOperator
+    | TupleOperator -> UnaryOperator
     | EqualsOperator
     | NotEqualsOperator
     | LessThanOperator
@@ -55,6 +87,9 @@ let (|UnaryOperator|BinaryOperator|TrinaryOperator|) opr =
     | SubtractOperator
     | MultiplyOperator
     | DivideOperator
+    | TupleOperator
+    | CurryOperator
+    | UncurryOperator
     | AppendOperator
     | RemoveOperator
     | UnionOperator
@@ -63,4 +98,4 @@ let (|UnaryOperator|BinaryOperator|TrinaryOperator|) opr =
     | ContainsOperator
     | LookupOperator -> BinaryOperator
     | FoldOperator
-    | IfOperator -> TrinaryOperator
+    | ConditionOperator -> TrinaryOperator

@@ -1,32 +1,36 @@
 enum Operator
 {
+	// Control flow
+	ConditionOperator = 1;
     // Equality
-    EqualsOperator = 1;
-    NotEqualsOperator = 2;
+    EqualsOperator = 2;
+    NotEqualsOperator = 3;
     // Ordering
-    LessThanOperator = 3;
-    LessThanEqualsOperator = 4;
-    GreaterThanOperator = 5;
-    GreaterThanEqualsOperator = 6;
+    LessThanOperator = 4;
+    LessThanEqualsOperator = 5;
+    GreaterThanOperator = 6;
+    GreaterThanEqualsOperator = 7;
     // Logic
-    NotOperator = 7;
-    AndOperator = 8;
-    OrOperator = 9;
+    NotOperator = 8;
+    AndOperator = 9;
+    OrOperator = 10;
     // Numeric
-    NegateOperator = 10;
-    AddOperator = 11;
-    SubtractOperator = 12;
-    MultiplyOperator = 13;
-    DivideOperator = 14;
+    NegateOperator = 11;
+    AddOperator = 12;
+    SubtractOperator = 13;
+    MultiplyOperator = 14;
+    DivideOperator = 15;
+	// Tuples
+	TupleOperator = 16;
+	CurryOperator = 17;
+	UncurryOperator = 18;
     // Collections
-    AppendOperator = 15;
-    RemoveOperator = 16;
-    UnionOperator = 17;
-    MinusOperator = 18;
-    ZipOperator = 19;
-    ContainsOperator = 20;
-    LookupOperator = 21;
-    FoldOperator = 22;
-    // Control flow
-    IfOperator = 23;
+    AppendOperator = 19;
+    RemoveOperator = 20;
+    UnionOperator = 21;
+    MinusOperator = 22;
+    ZipOperator = 23;
+    ContainsOperator = 24;
+    LookupOperator = 25;
+    FoldOperator = 26;
 }

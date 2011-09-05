@@ -35,6 +35,7 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
     <Compile Include="Functional.fs" />
+    <Compile Include="Exceptions.fs" />
     <Compile Include="Language.fs" />
     <Compile Include="LanguageSugar.fs" />
     <Compile Include="Visitor.fs" />
@@ -55,6 +56,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj">
+      <Name>SoftMemes.Napl.Runtime</Name>
+      <Project>{abd9e947-6a80-4d66-8fec-fd8f14351ead}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\SoftMemes.Napl.Serialization\SoftMemes.Napl.Serialization.csproj">
       <Name>SoftMemes.Napl.Serialization</Name>
       <Project>{78ae1a08-dbe7-4e21-80c1-4700d049a891}</Project>
