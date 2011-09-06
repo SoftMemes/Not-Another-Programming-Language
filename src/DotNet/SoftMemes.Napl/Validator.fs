@@ -18,7 +18,7 @@ let private collectionCastType cType t' =
     | MapType _, t -> invalidArg "t'" "Type argument must be a tuple for maps"
     | _ -> invalidArg "cType" "Argument is not a collection type"
 
-let rec private referenceCheck env (expr' & NaplExpression (_,expr)) =
+let rec private referenceCheck env (NaplExpression (_,expr) as expr') =
     match expr with
     | ParameterExpression p ->
         if not (Set.contains p env)
@@ -40,7 +40,7 @@ let private typeCheckOperator expr opr ts =
         | _ -> typeError expr "[<T1>,<T2>] where t1 = t2" ts
     | OrderingOperator ->
         match ts with
-        | [t1 & NumericType; t2 & NumericType] when t1 = t2 -> BooleanType
+        | [NumericType as t1; NumericType as t2] when t1 = t2 -> BooleanType
         | _ -> typeError expr "[<T1>,<T2>] where t1 is numeric, t1 = t2" ts
     | LogicOperator ->
         match ts with
@@ -48,9 +48,9 @@ let private typeCheckOperator expr opr ts =
         | _ -> typeError expr "[bool,bool]" ts
     | NumericOperator ->
         match opr, ts with
-        | UnaryOperator, [t & NumericType] -> t
+        | UnaryOperator, [NumericType as t] -> t
         | UnaryOperator, _ -> typeError expr "[<T>] where T is numeric" ts
-        | BinaryOperator, [t1 & NumericType; t2 & NumericType] when t1 = t2 -> t1
+        | BinaryOperator, [NumericType as t1; NumericType as t2] when t1 = t2 -> t1
         | BinaryOperator, _ -> typeError expr "[<T1>,<T2>] where T1 is numeric, t1 = t2" ts
     | TupleOperator -> TupleType ts
     | CurryOperator ->
@@ -69,7 +69,7 @@ let private typeCheckOperator expr opr ts =
     | UnionOperator
     | MinusOperator ->
         match ts with
-        | [tc & CollectionOfType t1; CollectionOfType t2] when t1 = t2 -> tc
+        | [(CollectionOfType t1) as tc; CollectionOfType t2] when t1 = t2 -> tc
         | _ -> typeError expr "[collection of <T1>,collection of <T1>]" ts
     | ZipOperator ->
         match ts with
@@ -96,9 +96,9 @@ let private typeCheckOperator expr opr ts =
         | [FunctionType ([at], t);at';CollectionOfType t'] when at = at' && t = t' -> at
         | _ -> typeError expr "[(<T1>, <T2>) -> <T1>,<T1>,collection of <T2>]" ts
 
-let rec private typeCheck (expr' & (NaplExpression (tag, expr))) =
+let rec private typeCheck (NaplExpression (tag, expr) as expr') =
     let ret t' expr = NaplExpression ((t',tag), expr)
-    let extract (expr & NaplExpression ((exprT, _), _)) = exprT, expr
+    let extract (NaplExpression ((exprT, _), _) as expr) = exprT, expr
     let typeCheck' = typeCheck >> extract
     match expr with
     | LambdaExpression (param, expr) ->
@@ -110,7 +110,7 @@ let rec private typeCheck (expr' & (NaplExpression (tag, expr))) =
         | IntegerValue _ -> ret IntegerType (ValueExpression value)
         | FloatValue _ -> ret FloatType (ValueExpression value)
         | StringValue _ -> ret StringType (ValueExpression value)
-    | ParameterExpression (p & Parameter (t, _)) ->
+    | ParameterExpression (NaplParameter (t, _) as p) ->
         ret t (ParameterExpression p)
     | OperatorExpression (opr, exprs) ->
         let ts, exprs' = exprs |> List.map typeCheck' |> List.unzip

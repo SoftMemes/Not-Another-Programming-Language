@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using SoftMemes.Napl.Language;
 using System.IO;
+using SoftMemes.Napl.Linq;
 
 namespace SoftMemes.Napl.TestApp
 {
@@ -9,18 +10,21 @@ namespace SoftMemes.Napl.TestApp
     {
         static void Main(string[] args)
         {
-            var p1 = Parameter.NewParameter(NaplType.IntegerType, "p1");
-            var p2 = Parameter.NewParameter(NaplType.IntegerType, "p2");
+            //var p1 = Parameter.NewParameter(NaplType.IntegerType, "p1");
+            //var p2 = Parameter.NewParameter(NaplType.IntegerType, "p2");
 
-            var eif = Expression.If(
-                Expression.BinaryOperator(
-                    Operator.LessThanOperator,
-                    Expression.Parameter(p1),
-                    Expression.Parameter(p2)),
-                Expression.StringValue("Yep!"),
-                Expression.StringValue("Nope :("));
+            //var eif = Expression.If(
+            //    Expression.BinaryOperator(
+            //        Operator.LessThanOperator,
+            //        Expression.Parameter(p1),
+            //        Expression.Parameter(p2)),
+            //    Expression.StringValue("Yep!"),
+            //    Expression.StringValue("Nope :("));
 
-            var e = Expression.Lambda(new[]{p1,p2}, eif);
+            //var e = Expression.Lambda(new[] { p1, p2 }, eif);
+
+            Expression<Func<int, int, string>> le = (p1, p2) => p1 < p2 ? "Yep!" : "Nope :(";
+            var e = le.ToNapl();
 
             Console.WriteLine(
                 "Parsed expression: {0}",
@@ -34,7 +38,7 @@ namespace SoftMemes.Napl.TestApp
             var ec = Compiler.Compile(et);
             Console.WriteLine("Compiled expression: {0}", ec);
 
-            while (ec.CanReduce) ec = ec.Reduce();            
+            while (ec.CanReduce) ec = ec.Reduce();
             Console.WriteLine("Reduced expression: {0}", ec);
 
             var func = (Func<int, int, string>)((LambdaExpression)ec).Compile();

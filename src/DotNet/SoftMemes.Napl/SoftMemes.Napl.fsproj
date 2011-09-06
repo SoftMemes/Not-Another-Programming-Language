@@ -42,6 +42,7 @@
     <Compile Include="Validator.fs" />
     <Compile Include="Compiler.fs" />
     <Compile Include="ExpressionBuilder.fs" />
+    <Compile Include="LinqExtensions.fs" />
     <Compile Include="Serializer.fs" />
     <Compile Include="PrettyPrinter.fs" />
     <None Include="packages.config" />

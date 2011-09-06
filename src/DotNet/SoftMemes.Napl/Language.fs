@@ -17,7 +17,7 @@ and NaplCollectionType
 
 [<CustomEquality>]
 [<CustomComparison>]
-type Parameter = Parameter of NaplType * string
+type NaplParameter = NaplParameter of NaplType * string
     with
         override param.Equals(other) = obj.ReferenceEquals(param, other)
         interface IComparable with
@@ -29,7 +29,7 @@ type Value
     | FloatValue of float
     | StringValue of string
 
-type Operator
+type NaplOperator
     // Control flow
     = ConditionOperator
     // Equality
@@ -68,9 +68,9 @@ type Operator
 [<StructuralComparison>]
 type NaplExpression<'t> = NaplExpression of 't * NaplExpression'<'t>
 and NaplExpression'<'t>
-    = LambdaExpression of Parameter list * NaplExpression<'t>
+    = LambdaExpression of NaplParameter list * NaplExpression<'t>
     | ValueExpression of Value
-    | ParameterExpression of Parameter
-    | OperatorExpression of Operator * NaplExpression<'t> list
+    | ParameterExpression of NaplParameter
+    | OperatorExpression of NaplOperator * NaplExpression<'t> list
     | CollectionExpression of NaplCollectionType * NaplExpression<'t> list
     | ApplyExpression of NaplExpression<'t> * NaplExpression<'t> list

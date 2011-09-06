@@ -14,5 +14,3 @@ type NaplValidationException =
         inherit System.Exception(
             (serializationInfo : SerializationInfo),
             streamingContext) }
-
-

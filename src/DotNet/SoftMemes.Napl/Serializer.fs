@@ -89,7 +89,7 @@ let rec private serializeNaplType t =
         res.sub_types.AddRange(ts |> List.map serializeNaplType)
     res
 
-let private serializeParameter (Parameter(pt, name)) pi =
+let private serializeParameter (NaplParameter(pt, name)) pi =
     let res = Serialization.Parameter()
     res.param_type <- serializeNaplType pt
     res.id <- pi
@@ -134,7 +134,7 @@ let rec private serialize env (NaplExpression (_, expr)) =
         | StringValue v ->
             res.value_kind_operands.Add(Serialization.NaplValueKind.StringKind)
             res.string_operands.Add(v)
-    | ParameterExpression (param & Parameter(t, name))->
+    | ParameterExpression (NaplParameter(t, name) as param)->
         let paramIdx = lookupParam env param
         res.expression_type <- Serialization.ExpressionType.ParameterExpression
         res.parameter_reference_operands.Add(paramIdx)

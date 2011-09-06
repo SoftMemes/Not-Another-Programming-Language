@@ -69,12 +69,12 @@ let rec private getNativeType = function
 
 let private getNativeArgs tin =
     match tin with
-    | TupleType (ts & [])
-    | TupleType (ts & (_::_::_)) ->
+    | TupleType ([] as ts)
+    | TupleType ((_::_::_) as ts) ->
         List.map getNativeType ts
     | t -> [getNativeType t]
 
-let private getNativeParam (Parameter(pt, pn)) =
+let private getNativeParam (NaplParameter(pt, pn)) =
     let nativePt = getNativeType pt
     Expression.Variable(nativePt, pn)
 
@@ -101,7 +101,7 @@ let rec private compile env (NaplExpression ((t,_),expr)) : LinqExpression =
     match expr with
     | LambdaExpression (ps, expr) ->
         let nativeParams = ps |> List.map getNativeParam
-        let nativeParamTs = ps |> List.map (fun (Parameter (t,_)) -> getNativeType t) 
+        let nativeParamTs = ps |> List.map (fun (NaplParameter (t,_)) -> getNativeType t) 
         let env' =
             List.zip ps nativeParams
             |> List.fold (fun e (k,v) -> Map.add k v e) env            
