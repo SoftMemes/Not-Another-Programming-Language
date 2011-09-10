@@ -3,10 +3,9 @@
 open System
 open System.Reflection
 open System.Linq.Expressions
-open SoftMemes.Functional
 open SoftMemes.Napl
-open SoftMemes.Napl.Language
-open SoftMemes.Napl.LanguageSugar
+open SoftMemes.Napl.Types
+open SoftMemes.Napl.Operators
 open SoftMemes.Napl.Runtime
 type LinqExpression = System.Linq.Expressions.Expression
 

@@ -1,6 +1,6 @@
 ﻿module SoftMemes.Napl.PrettyPrinter
 
-open SoftMemes.Napl.Language
+open SoftMemes.Napl
 
 let PrintExpression (e : NaplExpression<_>) = sprintf "%A" e
 

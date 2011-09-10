@@ -3,11 +3,22 @@
 open System
 open System.Collections.Generic
 open System.Linq.Expressions
-open SoftMemes.Functional
 open SoftMemes.Napl
-open SoftMemes.Napl.Language
 
 module Napl = SoftMemes.Napl.TaggedNaplExpressionBuilder
+
+/// Functionally flavoured (although mutable) API for the .NET
+/// Dictionary<,> type.
+module internal HashMap =
+    open System.Collections.Generic
+
+    let add k v (dict : Dictionary<_,_>) = dict.Add(k, v)
+    let remove k (dict : Dictionary<_,_>) = dict.Remove(k) |> ignore
+    let find k (dict : Dictionary<_,_>) = dict.[k]
+    let tryFind k (dict : Dictionary<_,_>) =
+        match dict.TryGetValue(k) with
+        | true, v -> Some v
+        | false, _ -> None
 
 module internal LinqConverter =
     let private typeToNapl =

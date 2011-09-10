@@ -1,6 +1,6 @@
 ﻿module SoftMemes.Napl.ExpressionVisitor
 
-open SoftMemes.Napl.Language
+open SoftMemes.Napl
 
 let visit f state (NaplExpression (_,expr)) =
     match expr with

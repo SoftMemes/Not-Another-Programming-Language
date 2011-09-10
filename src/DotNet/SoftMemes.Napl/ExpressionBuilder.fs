@@ -1,7 +1,5 @@
 ﻿namespace SoftMemes.Napl
 
-open SoftMemes.Napl.Language
-
 module NaplExpressionBuilder =
     let private Tag e = NaplExpression ((), e)
     // Primitive expressions

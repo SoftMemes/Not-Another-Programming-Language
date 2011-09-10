@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{dedb48d4-e555-4b67-9c5f-26aaf1fd2356}</ProjectGuid>
+    <ProjectGuid>{48da931a-95cf-41c3-a019-6ef896efaad6}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>HighLevelIl</RootNamespace>
-    <AssemblyName>SoftMemes.Napl</AssemblyName>
+    <RootNamespace>SoftMemes.Napl.Serialization</RootNamespace>
+    <AssemblyName>SoftMemes.Napl.Serialization</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Name>HighLevelIl</Name>
+    <Name>SoftMemes.Napl.Serialization.MonkeyMan</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +20,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\HighLevelIl.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\SoftMemes.Napl.Serialization.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,25 +29,34 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\HighLevelIl.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\SoftMemes.Napl.Serialization.XML</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
-    <Compile Include="Operators.fs" />
-    <Compile Include="Types.fs" />
-    <Compile Include="Expressions.fs" />
-    <Compile Include="ExpressionBuilder.fs" />
-    <Compile Include="ExpressionVisitor.fs" />
-    <Compile Include="LinqExtensions.fs" />
-    <Compile Include="PrettyPrinter.fs" />
+    <Compile Include="Serializer.fs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.1.0.0.280\lib\protobuf-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\SoftMemes.Napl.Serialization.Proto\SoftMemes.Napl.Serialization.Proto.csproj">
+      <Name>SoftMemes.Napl.Serialization.Proto</Name>
+      <Project>{78ae1a08-dbe7-4e21-80c1-4700d049a891}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl\SoftMemes.Napl.fsproj">
+      <Name>SoftMemes.Napl</Name>
+      <Project>{dedb48d4-e555-4b67-9c5f-26aaf1fd2356}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

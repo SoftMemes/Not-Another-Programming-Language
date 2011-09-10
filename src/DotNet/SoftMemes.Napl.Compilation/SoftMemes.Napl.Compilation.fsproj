@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{dedb48d4-e555-4b67-9c5f-26aaf1fd2356}</ProjectGuid>
+    <ProjectGuid>{044de991-c25b-4fa8-9a03-b1773c40ee36}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>HighLevelIl</RootNamespace>
-    <AssemblyName>SoftMemes.Napl</AssemblyName>
+    <RootNamespace>SoftMemes.Napl.Compilation</RootNamespace>
+    <AssemblyName>SoftMemes.Napl.Compilation</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Name>HighLevelIl</Name>
+    <Name>SoftMemes.Napl.Compilation</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +20,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\HighLevelIl.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\SoftMemes.Napl.Compilation.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,19 +29,8 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\HighLevelIl.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\SoftMemes.Napl.Compilation.XML</DocumentationFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
-  <ItemGroup>
-    <Compile Include="Operators.fs" />
-    <Compile Include="Types.fs" />
-    <Compile Include="Expressions.fs" />
-    <Compile Include="ExpressionBuilder.fs" />
-    <Compile Include="ExpressionVisitor.fs" />
-    <Compile Include="LinqExtensions.fs" />
-    <Compile Include="PrettyPrinter.fs" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
@@ -49,6 +38,25 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions.fs" />
+    <Compile Include="Validator.fs" />
+    <Compile Include="Compiler.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj">
+      <Name>SoftMemes.Napl.Runtime</Name>
+      <Project>{abd9e947-6a80-4d66-8fec-fd8f14351ead}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl\SoftMemes.Napl.fsproj">
+      <Name>SoftMemes.Napl</Name>
+      <Project>{dedb48d4-e555-4b67-9c5f-26aaf1fd2356}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">

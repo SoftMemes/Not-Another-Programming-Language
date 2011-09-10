@@ -1,14 +1,14 @@
 ﻿module SoftMemes.Napl.Validator
 
 open SoftMemes.Napl
-open SoftMemes.Napl.Language
-open SoftMemes.Napl.LanguageSugar
+open SoftMemes.Napl.Types
+open SoftMemes.Napl.Operators
 
-let private referenceError str = raise(System.Exception(str))
+let private referenceError str = raise(NaplValidationException(str))
 let private typeError expr expected ts =
     // TODO: Pretty print expression, showing only limited depth.
     let message = sprintf "Type error in %A: Expected %s, but found %A" expr expected ts
-    raise (System.Exception(message))
+    raise (NaplValidationException(message))
 
 let private collectionCastType cType t' =
     match cType, t' with
@@ -16,7 +16,6 @@ let private collectionCastType cType t' =
     | SetType _, _ -> SetType t'
     | MapType _, (TupleType [tk;tv]) -> MapType (tk, tv)
     | MapType _, t -> invalidArg "t'" "Type argument must be a tuple for maps"
-    | _ -> invalidArg "cType" "Argument is not a collection type"
 
 let rec private referenceCheck env (NaplExpression (_,expr) as expr') =
     match expr with

@@ -1,8 +1,9 @@
-﻿module  SoftMemes.Napl.Serializer
+﻿module SoftMemes.Napl.Serializer
 
-open SoftMemes.Functional
 open SoftMemes.Napl
-open SoftMemes.Napl.Language
+
+let curry f x y = f (x, y)
+let uncurry f (x,y) = f x y
 
 let private serializeOperator =
     function

@@ -11,7 +11,8 @@
     <RootNamespace>SoftMemes.Napl.TestApp</RootNamespace>
     <AssemblyName>SoftMemes.Napl.TestApp</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -52,8 +53,20 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SoftMemes.Napl.Serialization\SoftMemes.Napl.Serialization.csproj">
+    <ProjectReference Include="..\SoftMemes.Napl.Compilation\SoftMemes.Napl.Compilation.fsproj">
+      <Project>{044DE991-C25B-4FA8-9A03-B1773C40EE36}</Project>
+      <Name>SoftMemes.Napl.Compilation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj">
+      <Project>{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}</Project>
+      <Name>SoftMemes.Napl.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl.Serialization.Proto\SoftMemes.Napl.Serialization.Proto.csproj">
       <Project>{78AE1A08-DBE7-4E21-80C1-4700D049A891}</Project>
+      <Name>SoftMemes.Napl.Serialization.Proto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl.Serialization\SoftMemes.Napl.Serialization.fsproj">
+      <Project>{48DA931A-95CF-41C3-A019-6EF896EFAAD6}</Project>
       <Name>SoftMemes.Napl.Serialization</Name>
     </ProjectReference>
     <ProjectReference Include="..\SoftMemes.Napl\SoftMemes.Napl.fsproj">
@@ -62,6 +75,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

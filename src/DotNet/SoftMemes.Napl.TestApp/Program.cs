@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Linq.Expressions;
-using SoftMemes.Napl.Language;
 using System.IO;
+using System.Linq.Expressions;
+using SoftMemes.Napl;
 using SoftMemes.Napl.Linq;
 
 namespace SoftMemes.Napl.TestApp
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
@@ -44,7 +44,7 @@ namespace SoftMemes.Napl.TestApp
             var func = (Func<int, int, string>)((LambdaExpression)ec).Compile();
             Console.WriteLine("Result: {0}", func(42, 52));
 
-            var serialization = Serializer.Serialize(et);
+            var serialization = SoftMemes.Napl.Serializer.Serialize(et);
             Console.WriteLine("Serialization: {0}", serialization);
 
             var stream = new MemoryStream();
