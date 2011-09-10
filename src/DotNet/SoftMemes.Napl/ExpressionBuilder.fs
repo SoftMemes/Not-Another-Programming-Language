@@ -7,8 +7,8 @@ module NaplExpressionBuilder =
     let Value v = v |> ValueExpression |> Tag
     let Parameter param = param |> ParameterExpression |> Tag
     let Operator opr exprs = OperatorExpression (opr, exprs) |> Tag
-    let Collection cType itemsExpr = CollectionExpression (cType, itemsExpr) |> Tag
     let Apply funcExpr paramExprs = ApplyExpression (funcExpr, paramExprs) |> Tag
+    let New t exprs = InstantiateExpression (t, exprs) |> Tag
     // Shortcuts for literals
     let BooleanValue v = v |> BooleanValue |> Value
     let True = BooleanValue true
@@ -16,7 +16,7 @@ module NaplExpressionBuilder =
     let IntegerValue v = v |> IntegerValue |> Value
     let FloatValue v = v |> FloatValue |> Value
     let StringValue v = v |> StringValue |> Value
-    let Tuple exprs = exprs |> Operator TupleOperator
+    let Tuple ts exprs = InstantiateExpression(TupleType(ts), exprs) |> Tag
     // Operator shortcuts
     let UnaryOperator opr expr = OperatorExpression (opr, [expr]) |> Tag
     let BinaryOperator opr leftExpr rightExpr = Operator opr [leftExpr;rightExpr]
@@ -35,8 +35,8 @@ module TaggedNaplExpressionBuilder =
     let Value v = v |> ValueExpression |> Tag
     let Parameter param = param |> ParameterExpression |> Tag
     let Operator opr exprs = OperatorExpression (opr, exprs) |> Tag
-    let Collection cType itemsExpr = CollectionExpression (cType, itemsExpr) |> Tag
     let Apply funcExpr paramExprs = ApplyExpression (funcExpr, paramExprs) |> Tag
+    let New t exprs = InstantiateExpression (t, exprs) |> Tag
     // Shortcuts for literals
     let BooleanValue v = v |> BooleanValue |> Value
     let True t = BooleanValue true t
@@ -44,7 +44,7 @@ module TaggedNaplExpressionBuilder =
     let IntegerValue v = v |> IntegerValue |> Value
     let FloatValue v = v |> FloatValue |> Value
     let StringValue v = v |> StringValue |> Value
-    let Tuple exprs = exprs |> Operator TupleOperator
+    let Tuple ts exprs = InstantiateExpression(TupleType(ts), exprs) |> Tag
     // Operator shortcuts
     let UnaryOperator opr expr = OperatorExpression (opr, [expr]) |> Tag
     let BinaryOperator opr leftExpr rightExpr = Operator opr [leftExpr;rightExpr]

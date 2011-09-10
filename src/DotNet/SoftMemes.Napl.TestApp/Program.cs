@@ -30,12 +30,12 @@ namespace SoftMemes.Napl.TestApp
                 "Parsed expression: {0}",
                 PrettyPrinter.PrintExpression(e));
 
-            var et = Validator.TypeCheck(e);
+            var et = NaplCompiler.TypeCheck(e);
             Console.WriteLine(
                 "Type checked expression: {0}",
                 PrettyPrinter.PrintExpression(et));
 
-            var ec = Compiler.Compile(et);
+            var ec = NaplCompiler.Compile(e);
             Console.WriteLine("Compiled expression: {0}", ec);
 
             while (ec.CanReduce) ec = ec.Reduce();

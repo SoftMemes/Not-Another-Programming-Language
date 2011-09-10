@@ -1,9 +1,9 @@
 enum ExpressionType
 {
-    LambdaExpression = 1;
-    ValueExpression = 2;
-    ParameterExpression = 3;
-    OperatorExpression = 4;
-    CollectionExpression = 5;
+    ValueExpression = 1;
+    OperatorExpression = 2;
+    InstantiateExpression = 3;
+    LambdaExpression = 4;
+    ParameterExpression = 5;
     ApplyExpression = 6;
 }

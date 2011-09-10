@@ -51,7 +51,6 @@ let private deserializeOperator =
     | Serialization.Operator.SubtractOperator -> SubtractOperator
     | Serialization.Operator.MultiplyOperator -> MultiplyOperator
     | Serialization.Operator.DivideOperator -> DivideOperator
-    | Serialization.Operator.TupleOperator -> TupleOperator
     | Serialization.Operator.CurryOperator -> CurryOperator
     | Serialization.Operator.UncurryOperator -> UncurryOperator
     | Serialization.Operator.AppendOperator -> AppendOperator
@@ -74,13 +73,13 @@ let rec private serializeNaplType t =
     | TupleType ts ->
         res.kind <- Serialization.NaplValueKind.TupleKind
         res.sub_types.AddRange(ts |> List.map serializeNaplType)
-    | CollectionType(ListType t) ->
+    | ListType t ->
         res.kind <- Serialization.NaplValueKind.ListKind
         res.sub_types.Add(serializeNaplType t)
-    | CollectionType(SetType t) ->
+    | SetType t ->
         res.kind <- Serialization.NaplValueKind.SetKind
         res.sub_types.Add(serializeNaplType t)
-    | CollectionType(MapType (tk, tv)) ->
+    | MapType (tk, tv) ->
         res.kind <- Serialization.NaplValueKind.MapKind
         res.sub_types.Add(serializeNaplType tk)
         res.sub_types.Add(serializeNaplType tv)
@@ -140,12 +139,12 @@ let rec private serialize env (NaplExpression (_, expr)) =
         res.expression_type <- Serialization.ExpressionType.ParameterExpression
         res.parameter_reference_operands.Add(paramIdx)
     | OperatorExpression (opr, exprs) ->
-        res.expression_type <- Serialization.ExpressionType.CollectionExpression
+        res.expression_type <- Serialization.ExpressionType.OperatorExpression
         res.operator_operands.Add(serializeOperator opr)
         res.expression_operands.AddRange(exprs |> List.map (serialize env))
-    | CollectionExpression (t, exprs) ->
-        res.expression_type <- Serialization.ExpressionType.CollectionExpression
-        res.value_type_operands.Add(serializeNaplType (CollectionType t))
+    | InstantiateExpression (t, exprs) ->
+        res.expression_type <- Serialization.ExpressionType.InstantiateExpression
+        res.value_type_operands.Add(serializeNaplType t)
         res.expression_operands.AddRange(exprs |> List.map (serialize env))
     | ApplyExpression (fExpr, pExprs) ->
         res.expression_type <- Serialization.ExpressionType.ApplyExpression

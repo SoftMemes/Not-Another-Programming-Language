@@ -40,8 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions.fs" />
-    <Compile Include="Validator.fs" />
-    <Compile Include="Compiler.fs" />
+    <Compile Include="PlatformFunctions.fs" />
+    <Compile Include="TypeCompiler.fs" />
+    <Compile Include="OperatorCompiler.fs" />
+    <Compile Include="ExpressionCompiler.fs" />
+    <Compile Include="NaplCompiler.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj">

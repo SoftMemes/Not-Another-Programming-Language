@@ -21,9 +21,9 @@ type NaplParameter = NaplParameter of NaplType * string
 [<StructuralComparison>]
 type NaplExpression<'t> = NaplExpression of 't * NaplExpression'<'t>
 and NaplExpression'<'t>
-    = LambdaExpression of NaplParameter list * NaplExpression<'t>
-    | ValueExpression of NaplValue
-    | ParameterExpression of NaplParameter
+    = ValueExpression of NaplValue
     | OperatorExpression of NaplOperator * NaplExpression<'t> list
-    | CollectionExpression of NaplCollectionType * NaplExpression<'t> list
+    | InstantiateExpression of NaplType * NaplExpression<'t> list
+    | LambdaExpression of NaplParameter list * NaplExpression<'t>
+    | ParameterExpression of NaplParameter
     | ApplyExpression of NaplExpression<'t> * NaplExpression<'t> list

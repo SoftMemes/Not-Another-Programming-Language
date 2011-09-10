@@ -22,7 +22,6 @@ type NaplOperator
     | MultiplyOperator
     | DivideOperator
     // Tuples
-    | TupleOperator
     | CurryOperator
     | UncurryOperator
     // Collections
@@ -49,7 +48,6 @@ module Operators =
         = UnaryOperatorArity
         | BinaryOperatorArity
         | TrinaryOperatorArity
-        | NAryOperatorArity
 
     let private categorizeOperator =
         function
@@ -73,7 +71,6 @@ module Operators =
         | MultiplyOperator
         | DivideOperator            -> NumericOperatorFamily, BinaryOperatorArity
         // Tuples
-        | TupleOperator             -> TupleOperatorFamily, NAryOperatorArity
         | CurryOperator
         | UncurryOperator           -> TupleOperatorFamily, UnaryOperatorArity
         // Collections
@@ -96,9 +93,16 @@ module Operators =
         | TupleOperatorFamily -> TupleOperator
         | CollectionOperatorFamily -> CollectionOperator
 
-    let (|UnaryOperator|BinaryOperator|TrinaryOperator|NAryOperator|) opr =
+    let (|UnaryOperator|BinaryOperator|TrinaryOperator|) opr =
         match categorizeOperator opr |> snd with
         | UnaryOperatorArity -> UnaryOperator
         | BinaryOperatorArity -> BinaryOperator
         | TrinaryOperatorArity -> TrinaryOperator
-        | NAryOperatorArity -> NAryOperator
+
+    let private setCollectionType ct t' =
+        match ct, t' with
+        | ListType _, _ -> ListType t'
+        | SetType _, _ -> SetType t'
+        | MapType _, (TupleType [tk;tv]) -> MapType (tk, tv)
+        | MapType _, t -> invalidArg "t'" "Type argument must be a tuple for maps"
+        | _ -> invalidArg "ct" "Expected collection type"

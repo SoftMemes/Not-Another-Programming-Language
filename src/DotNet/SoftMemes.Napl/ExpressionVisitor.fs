@@ -10,8 +10,8 @@ let visit f state (NaplExpression (_,expr)) =
     | ParameterExpression _ -> ()
     | OperatorExpression (opr, exprs) ->
         exprs |> List.iter (f state)
-    | CollectionExpression (t, exprs) ->
-        exprs |> List.iter (f state)
     | ApplyExpression (funcExpr, exprs) ->
         f state funcExpr
+        exprs |> List.iter (f state)
+    | InstantiateExpression (t, exprs) ->
         exprs |> List.iter (f state)
