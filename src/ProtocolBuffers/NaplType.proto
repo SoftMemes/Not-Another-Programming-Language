@@ -1,4 +1,4 @@
-enum NaplValueKind
+enum NaplTypeKind
 {
 	BooleanKind = 1;
 	StringKind = 2;
@@ -13,6 +13,6 @@ enum NaplValueKind
 
 message NaplType
 {
-	required NaplValueKind kind = 1;
+	required NaplTypeKind kind = 1;
 	repeated NaplType sub_types = 2;
 }

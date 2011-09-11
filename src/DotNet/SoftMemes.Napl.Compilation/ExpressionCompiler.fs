@@ -57,7 +57,7 @@ let private getNativeParam (NaplParameter(pt, pn)) =
     Expression.Variable(nativePt, pn)
 
 let rec compile env (NaplExpression ((t,_),expr)) : LinqExpression =
-    let compileOperator = OperatorCompiler.compileOperator (compile env)
+    let compileOperator = OperatorCompiler.compile (compile env)
     match expr with
     | LambdaExpression (ps, expr) ->
         let nativeParams = ps |> List.map getNativeParam

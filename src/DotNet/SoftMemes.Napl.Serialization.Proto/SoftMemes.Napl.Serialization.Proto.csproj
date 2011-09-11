@@ -40,19 +40,33 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\ProtocolBuffers\Expression.cs">
-      <Link>Expression.cs</Link>
+    <Compile Include="..\..\ProtocolBuffers\NaplExpression.cs">
+      <Link>NaplExpression.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Expression.proto</DependentUpon>
+      <DependentUpon>NaplExpression.proto</DependentUpon>
     </Compile>
-    <Compile Include="..\..\ProtocolBuffers\ExpressionType.cs">
-      <Link>ExpressionType.cs</Link>
+    <Compile Include="..\..\ProtocolBuffers\NaplExpressionType.cs">
+      <Link>NaplExpressionType.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>ExpressionType.proto</DependentUpon>
+      <DependentUpon>NaplExpressionType.proto</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplOperator.cs">
+      <Link>NaplOperator.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplOperator.proto</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplParameter.cs">
+      <Link>NaplParameter.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplParameter.proto</DependentUpon>
     </Compile>
     <Compile Include="..\..\ProtocolBuffers\NaplType.cs">
       <Link>NaplType.cs</Link>
@@ -61,47 +75,33 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>NaplType.proto</DependentUpon>
     </Compile>
-    <Compile Include="..\..\ProtocolBuffers\Operator.cs">
-      <Link>Operator.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Operator.proto</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\ProtocolBuffers\Parameter.cs">
-      <Link>Parameter.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Parameter.proto</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ProtocolBuffers\Expression.proto">
-      <Link>Expression.proto</Link>
+    <None Include="..\..\ProtocolBuffers\NaplExpression.proto">
+      <Link>NaplExpression.proto</Link>
       <Generator>ProtoBufTool</Generator>
-      <LastGenOutput>Expression.cs</LastGenOutput>
+      <LastGenOutput>NaplExpression.cs</LastGenOutput>
     </None>
-    <None Include="..\..\ProtocolBuffers\ExpressionType.proto">
-      <Link>ExpressionType.proto</Link>
+    <None Include="..\..\ProtocolBuffers\NaplExpressionType.proto">
+      <Link>NaplExpressionType.proto</Link>
       <Generator>ProtoBufTool</Generator>
-      <LastGenOutput>ExpressionType.cs</LastGenOutput>
+      <LastGenOutput>NaplExpressionType.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplOperator.proto">
+      <Link>NaplOperator.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplOperator.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplParameter.proto">
+      <Link>NaplParameter.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplParameter.cs</LastGenOutput>
     </None>
     <None Include="..\..\ProtocolBuffers\NaplType.proto">
       <Link>NaplType.proto</Link>
       <Generator>ProtoBufTool</Generator>
       <LastGenOutput>NaplType.cs</LastGenOutput>
-    </None>
-    <None Include="..\..\ProtocolBuffers\Operator.proto">
-      <Link>Operator.proto</Link>
-      <Generator>ProtoBufTool</Generator>
-      <LastGenOutput>Operator.cs</LastGenOutput>
-    </None>
-    <None Include="..\..\ProtocolBuffers\Parameter.proto">
-      <Link>Parameter.proto</Link>
-      <Generator>ProtoBufTool</Generator>
-      <LastGenOutput>Parameter.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

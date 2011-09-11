@@ -1,4 +1,4 @@
-enum ExpressionType
+enum NaplExpressionType
 {
     ValueExpression = 1;
     OperatorExpression = 2;

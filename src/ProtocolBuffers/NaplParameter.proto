@@ -1,6 +1,6 @@
 import "NaplType.proto";
 
-message Parameter
+message NaplParameter
 {
 	required NaplType param_type = 1;
 	required int32 id = 2;

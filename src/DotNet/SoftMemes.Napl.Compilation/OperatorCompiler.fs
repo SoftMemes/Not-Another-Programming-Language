@@ -80,7 +80,7 @@ let typeCheck expr opr ts =
         | [FunctionType ([at], t);at';CollectionType t'] when at = at' && t = t' -> at
         | _ -> typeError expr "[(<T1>, <T2>) -> <T1>,<T1>,collection of <T2>]" ts
 
-let compileOperator compileExpression t opr exprs : LinqExpression =
+let compile compileExpression t opr exprs : LinqExpression =
     let exprTs = exprs |> List.map getType
     let nativeTs = exprTs |> List.map getNativeType
     match opr, exprs with

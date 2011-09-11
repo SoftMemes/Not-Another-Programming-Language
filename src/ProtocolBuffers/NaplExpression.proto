@@ -1,0 +1,19 @@
+import "NaplExpressionType.proto";
+import "NaplType.proto";
+import "NaplParameter.proto";
+import "NaplOperator.proto";
+
+message NaplExpression
+{
+	required NaplExpressionType expression_type = 1;
+	repeated NaplTypeKind value_kind_operands = 2;
+	repeated NaplType value_type_operands = 3;
+	repeated bool boolean_operands = 4;
+	repeated int32 integer_operands = 5;
+	repeated double float_operands = 6;
+	repeated string string_operands = 7;
+	repeated NaplParameter parameter_operands = 8;
+	repeated int32 parameter_reference_operands = 9;
+	repeated NaplExpression expression_operands = 10;
+	repeated NaplOperator operator_operands = 11;
+}
