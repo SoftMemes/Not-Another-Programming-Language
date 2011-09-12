@@ -1,7 +1,7 @@
 ﻿namespace SoftMemes.Napl
 
 module NaplExpressionBuilder =
-    let private Tag e = NaplExpression ((), e)
+    let private Tag e = NaplExpression (Empty, e)
     // Primitive expressions
     let Lambda ps expr = LambdaExpression (List.ofSeq ps, expr) |> Tag
     let Value v = v |> ValueExpression |> Tag

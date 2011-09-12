@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SoftMemes.Napl.Compilation"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftMemes.Napl.Runtime", "SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj", "{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftMemes.Napl.TestGenerator", "SoftMemes.Napl.TestGenerator\SoftMemes.Napl.TestGenerator.csproj", "{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}.Release|x86.ActiveCfg = Release|Any CPU
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Debug|x86.ActiveCfg = Debug|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Debug|x86.Build.0 = Debug|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Release|Any CPU.ActiveCfg = Release|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Release|x86.ActiveCfg = Release|x86
+		{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

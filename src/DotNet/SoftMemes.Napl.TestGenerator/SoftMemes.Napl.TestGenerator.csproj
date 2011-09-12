@@ -5,14 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{48DD7FB0-4AB8-456F-81F4-A8292EEE5FBA}</ProjectGuid>
+    <ProjectGuid>{E748A8B5-F304-4B44-B0FD-1357E8BB1B8B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SoftMemes.Napl.TestApp</RootNamespace>
-    <AssemblyName>SoftMemes.Napl.TestApp</AssemblyName>
+    <RootNamespace>SoftMemes.Napl.TestGenerator</RootNamespace>
+    <AssemblyName>SoftMemes.Napl.TestGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -34,29 +33,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SoftMemes.Napl.TestGenerator.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+    <Reference Include="protobuf-net">
       <HintPath>..\packages\protobuf-net.1.0.0.280\lib\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestData.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SoftMemes.Napl.Compilation\SoftMemes.Napl.Compilation.fsproj">
-      <Project>{044DE991-C25B-4FA8-9A03-B1773C40EE36}</Project>
-      <Name>SoftMemes.Napl.Compilation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj">
-      <Project>{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}</Project>
-      <Name>SoftMemes.Napl.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SoftMemes.Napl.Serialization.Proto\SoftMemes.Napl.Serialization.Proto.csproj">
       <Project>{78AE1A08-DBE7-4E21-80C1-4700D049A891}</Project>
       <Name>SoftMemes.Napl.Serialization.Proto</Name>
@@ -71,7 +68,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
