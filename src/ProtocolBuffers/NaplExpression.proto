@@ -1,4 +1,5 @@
 import "NaplExpressionType.proto";
+import "NaplValueKind.proto";
 import "NaplType.proto";
 import "NaplParameter.proto";
 import "NaplOperator.proto";
@@ -6,8 +7,8 @@ import "NaplOperator.proto";
 message NaplExpression
 {
 	required NaplExpressionType expression_type = 1;
-	repeated NaplTypeKind value_kind_operands = 2;
-	repeated NaplType value_type_operands = 3;
+	repeated NaplValueKind value_kind_operands = 2;
+	repeated NaplType type_operands = 3;
 	repeated bool boolean_operands = 4;
 	repeated int32 integer_operands = 5;
 	repeated double float_operands = 6;

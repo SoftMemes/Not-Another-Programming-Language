@@ -1,0 +1,7 @@
+enum NaplValueKind
+{
+	BooleanValueKind = 1;
+	StringValueKind = 2;
+	IntegerValueKind = 3;
+	FloatValueKind = 4;
+}

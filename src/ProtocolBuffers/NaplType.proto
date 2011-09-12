@@ -1,14 +1,14 @@
 enum NaplTypeKind
 {
-	BooleanKind = 1;
-	StringKind = 2;
-	IntegerKind = 3;
-	FloatKind = 4;
-	TupleKind = 5;
-	ListKind = 6;
-	SetKind = 7;
-	MapKind = 8;
-	FunctionKind = 9;
+	BooleanTypeKind = 1;
+	StringTypeKind = 2;
+	IntegerTypeKind = 3;
+	FloatTypeKind = 4;
+	TupleTypeKind = 5;
+	ListTypeKind = 6;
+	SetTypeKind = 7;
+	MapTypeKind = 8;
+	FunctionTypeKind = 9;
 }
 
 message NaplType

@@ -75,6 +75,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>NaplType.proto</DependentUpon>
     </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplValueKind.cs">
+      <Link>NaplValueKind.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplValueKind.proto</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +109,11 @@
       <Link>NaplType.proto</Link>
       <Generator>ProtoBufTool</Generator>
       <LastGenOutput>NaplType.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplValueKind.proto">
+      <Link>NaplValueKind.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplValueKind.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
