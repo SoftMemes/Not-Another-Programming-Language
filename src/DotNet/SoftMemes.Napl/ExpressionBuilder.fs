@@ -1,7 +1,7 @@
 ﻿namespace SoftMemes.Napl
 
 module NaplExpressionBuilder =
-    let private Tag e = NaplExpression (Empty, e)
+    let private Tag e = { NaplExpression.Annotation = Empty; Expression = e}
     // Primitive expressions
     let Lambda ps expr = LambdaExpression (List.ofSeq ps, expr) |> Tag
     let Value v = v |> ValueExpression |> Tag
@@ -29,7 +29,7 @@ module NaplExpressionBuilder =
     let If condExpr trueExpr falseExpr = Operator ConditionOperator [condExpr;trueExpr;falseExpr]
 
 module TaggedNaplExpressionBuilder =
-    let private Tag e t = NaplExpression (t, e)
+    let private Tag e t = { NaplExpression.Annotation = t; Expression = e}
     // Primitive expressions
     let Lambda ps expr = LambdaExpression (List.ofSeq ps, expr) |> Tag
     let Value v = v |> ValueExpression |> Tag

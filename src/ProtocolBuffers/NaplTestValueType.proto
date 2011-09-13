@@ -1,0 +1,8 @@
+enum NaplTestValueType
+{
+	BooleanTestValueType = 1;
+	StringTestValueType = 2;
+	IntegerTestValueType = 3;
+	FloatTestValueType = 4;
+	TupleTestValueType = 5;
+}

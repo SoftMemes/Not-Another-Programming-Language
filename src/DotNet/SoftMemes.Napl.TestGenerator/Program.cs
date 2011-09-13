@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ProtoBuf;
 
@@ -22,90 +20,78 @@ namespace SoftMemes.Napl.TestGenerator
 
             foreach (var t in TestData.TestDatas)
             {
-                var categoryDir = Path.Combine(outputDir, SanitizeFilename(t.Category));
-                Directory.CreateDirectory(categoryDir);
+                var filename = GetTestRecordFilename(outputDir, t);
 
-                var filename = SanitizeFilename(t.Description);
-                var naplFilename = Path.Combine(categoryDir, filename + ".napl");
-                var testCasesFilename = Path.Combine(categoryDir, filename + ".txt");
-
-                using (var naplStream = File.Open(naplFilename, FileMode.Create))
+                using (var naplStream = File.Open(filename, FileMode.Create))
                 {
-                    Serializer.Serialize(naplStream, NaplSerializer.Serialize(t.Expression));
-                }
-
-                using (var testCasesStream = File.Open(testCasesFilename, FileMode.Create))
-                using (var testCasesWriter = new StreamWriter(testCasesStream, Encoding.UTF8))
-                {
-                    testCasesWriter.WriteLine(
-                        string.Join("\t", t.ExpectedSignature.Select(ToPortableType)));
-
-                    foreach (var testCase in t.TestCases)
-                    {
-                        testCasesWriter.WriteLine(
-                            string.Join(
-                                "\t",
-                                Enumerable
-                                .Concat(testCase.Arguments, new[] { testCase.ExpectedResult })
-                                .Select(ToPortableLiteral)));
-                    }
+                    var testRecord = new Serialization.TestRecords.NaplTestRecord();
+                    testRecord.expression = NaplSerializer.SerializeExpression(t.Expression);
+                    testRecord.expression_type = NaplSerializer.SerializeType(t.ExpectedExpressionType);
+                    testRecord.test_cases.AddRange(t.TestCases.Select(SerializeTestCase));
+                    testRecord.description = t.Description;
+                    Serializer.Serialize(naplStream, testRecord);
                 }
             }
 
             return 0;
         }
 
-        private static string EscapeString(string str)
+        private static Serialization.TestRecords.NaplTestCase SerializeTestCase(TestCase testCase)
         {
-            return str
-                .Replace("\0", "\\0")
-                .Replace("\t", "\\t")
-                .Replace("\r", "\\r")
-                .Replace("\n", "\\n");
+            var res = new Serialization.TestRecords.NaplTestCase();
+            res.arguments.AddRange(testCase.Arguments.Select(SerializeTestValue));
+            res.expected_result = SerializeTestValue(testCase.ExpectedResult);
+            return res;
         }
 
-        private static string ToPortableLiteral(object o)
+        private static Serialization.TestRecords.NaplTestValue SerializeTestValue(object value)
         {
-            if (o is bool)
+            if (value is bool)
             {
-                return (bool)o ? "true" : "false";
+                return new Serialization.TestRecords.NaplTestValue
+                {
+                    value_type = Serialization.TestRecords.NaplTestValueType.BooleanTestValueType,
+                    boolean_value = (bool)value,
+                };
             }
-            else if (o is string)
+            else if (value is int)
             {
-                return EscapeString((string)o);
+                return new Serialization.TestRecords.NaplTestValue
+                {
+                    value_type = Serialization.TestRecords.NaplTestValueType.IntegerTestValueType,
+                    integer_value = (int)value,
+                };
             }
-            else if (o is double)
+            else if (value is double)
             {
-                return ((double)o).ToString("r", CultureInfo.InvariantCulture);
+                return new Serialization.TestRecords.NaplTestValue
+                {
+                    value_type = Serialization.TestRecords.NaplTestValueType.FloatTestValueType,
+                    float_value = (double)value,
+                };
+            }
+            else if (value is string)
+            {
+                return new Serialization.TestRecords.NaplTestValue
+                {
+                    value_type = Serialization.TestRecords.NaplTestValueType.StringTestValueType,
+                    string_value = (string)value,
+                };
             }
             else
             {
-                return string.Format(CultureInfo.InvariantCulture, "{0}", o);
+                // TODO: Tuples
+                throw new ArgumentException();
             }
         }
 
-        private static string ToPortableType(Type type)
+        private static string GetTestRecordFilename(string baseOutputDir, TestRecord t)
         {
-            if (type == typeof(bool))
-            {
-                return "boolean";
-            }
-            else if (type == typeof(int))
-            {
-                return "int";
-            }
-            else if (type == typeof(double))
-            {
-                return "float";
-            }
-            else if (type == typeof(string))
-            {
-                return "string";
-            }
-            else 
-            {
-                throw new ArgumentException();
-            }
+            var categoryDir = Path.Combine(baseOutputDir, SanitizeFilename(t.Category));
+            Directory.CreateDirectory(categoryDir);
+
+            var filename = SanitizeFilename(t.Description) + ".napltest";
+            return Path.Combine(categoryDir, filename);
         }
 
         private static string SanitizeFilename(string name)

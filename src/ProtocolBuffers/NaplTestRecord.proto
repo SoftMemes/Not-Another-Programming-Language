@@ -1,0 +1,12 @@
+import "NaplExpression.proto";
+import "NaplType.proto";
+import "NaplTestCase.proto";
+
+message NaplTestRecord
+{
+	required NaplExpression expression = 1;
+	required NaplType expression_type = 2;
+	repeated NaplTestCase test_cases = 3;
+
+	optional string description = 100;
+}

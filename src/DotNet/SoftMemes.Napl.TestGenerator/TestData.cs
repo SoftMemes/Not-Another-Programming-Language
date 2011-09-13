@@ -26,25 +26,25 @@ namespace SoftMemes.Napl.TestGenerator
         }
     }
 
-    internal sealed class TestExpression
+    internal sealed class TestRecord
     {
         private readonly string _category;
         private readonly string _description;
         private readonly NaplExpression<Unit> _expression;
-        private readonly Type[] _expectedSignature;
+        private readonly NaplType _expectedExpressionType;
         private readonly TestCase[] _testCases;
 
-        public TestExpression(
+        public TestRecord(
             string category,
             string description,
             NaplExpression<Unit> expression,
-            Type[] expectedSignature,
+            NaplType expectedExpressionType,
             TestCase[] testCases)
         {
             _category = category;
             _description = description;
             _expression = expression;
-            _expectedSignature = expectedSignature;
+            _expectedExpressionType = expectedExpressionType;
             _testCases = testCases;
         }
 
@@ -63,9 +63,9 @@ namespace SoftMemes.Napl.TestGenerator
             get { return _expression; }
         }
 
-        public Type[] ExpectedSignature
+        public NaplType ExpectedExpressionType
         {
-            get { return _expectedSignature; }  
+            get { return _expectedExpressionType; }  
         } 
 
         public TestCase[] TestCases
@@ -76,7 +76,7 @@ namespace SoftMemes.Napl.TestGenerator
 
     internal static class TestData
     {
-        public static readonly TestExpression[] TestDatas = new[]
+        public static readonly TestRecord[] TestDatas = new[]
         {
             simpleBoolCase("simple values", "boolean false", false),
             simpleBoolCase("simple values", "boolean true", true),
@@ -92,54 +92,44 @@ namespace SoftMemes.Napl.TestGenerator
             simpleStringCase("simple values", "string with unicode", "你好，你的世界如何使用Unicode？"),
         };
 
-        private static TestExpression simpleBoolCase(string category, string description, bool data)
+        private static TestRecord simpleBoolCase(string category, string description, bool data)
         {
-            return FromExpression<bool>(
+            return new TestRecord(
                 category,
                 description,
                 NaplExpressionBuilder.BooleanValue(data),
-                Tuple.Create(data));
+                NaplType.BooleanType,
+                new[] { new TestCase(data) });
         }
 
-        private static TestExpression simpleIntCase(string category, string description, int data)
+        private static TestRecord simpleIntCase(string category, string description, int data)
         {
-            return FromExpression<int>(
+            return new TestRecord(
                 category,
                 description,
                 NaplExpressionBuilder.IntegerValue(data),
-                Tuple.Create(data));
+                NaplType.IntegerType,
+                new[] { new TestCase(data) });
         }
 
-        private static TestExpression simpleFloatCase(string category, string description, double data)
+        private static TestRecord simpleFloatCase(string category, string description, double data)
         {
-            return FromExpression<double>(
+            return new TestRecord(
                 category,
                 description,
                 NaplExpressionBuilder.FloatValue(data),
-                Tuple.Create(data));
+                NaplType.FloatType,
+                new[] { new TestCase(data) });
         }
 
-        private static TestExpression simpleStringCase(string category, string description, string data)
+        private static TestRecord simpleStringCase(string category, string description, string data)
         {
-            return FromExpression<string>(
+            return new TestRecord(
                 category,
                 description,
                 NaplExpressionBuilder.StringValue(data),
-                Tuple.Create(data));
-        }
-        
-        private static TestExpression FromExpression<TOut>(
-            string category,
-            string description,
-            NaplExpression<Unit> expr,
-            params Tuple<TOut>[] cases)
-        {
-            return new TestExpression(
-                category,
-                description,
-                expr,
-                new[] { typeof(TOut) },
-                cases.Select(e => new TestCase(e.Item1)).ToArray());
+                NaplType.StringType,
+                new[] { new TestCase(data) });
         }
     }
 }

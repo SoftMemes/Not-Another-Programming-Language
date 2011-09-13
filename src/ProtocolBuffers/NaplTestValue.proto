@@ -1,0 +1,11 @@
+import "NaplTestValueType.proto";
+
+message NaplTestValue
+{
+	required NaplTestValueType value_type = 1;
+	optional bool boolean_value = 2;
+	optional int32 integer_value = 3;
+	optional double float_value = 4;
+	optional string string_value = 5;
+	repeated NaplTestValue sub_values = 6;
+}

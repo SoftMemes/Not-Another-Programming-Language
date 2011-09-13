@@ -10,7 +10,7 @@ type NaplValue
 
 [<CustomEquality>]
 [<CustomComparison>]
-type NaplParameter = NaplParameter of NaplType * string
+type NaplParameter = { Type : NaplType; Name : string }
     with
         override param.Equals(other) = obj.ReferenceEquals(param, other)
         interface IComparable with
@@ -19,7 +19,7 @@ type NaplParameter = NaplParameter of NaplType * string
 
 [<StructuralEquality>]
 [<StructuralComparison>]
-type NaplExpression<'t> = NaplExpression of 't * NaplExpression'<'t>
+type NaplExpression<'t> = { Annotation : 't; Expression : NaplExpression'<'t> }
 and NaplExpression'<'t>
     = ValueExpression of NaplValue
     | OperatorExpression of NaplOperator * NaplExpression<'t> list

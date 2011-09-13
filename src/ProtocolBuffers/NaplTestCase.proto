@@ -1,0 +1,9 @@
+import "NaplTestValue.proto";
+
+message NaplTestCase
+{
+    repeated NaplTestValue arguments = 1;
+    required NaplTestValue expected_result = 2;
+    
+    optional string description = 100;
+}

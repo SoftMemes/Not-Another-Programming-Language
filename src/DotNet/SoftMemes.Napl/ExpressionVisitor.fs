@@ -2,7 +2,7 @@
 
 open SoftMemes.Napl
 
-let visit f state (NaplExpression (_,expr)) =
+let visit f state {NaplExpression.Expression = expr} =
     match expr with
     | LambdaExpression (param, expr) ->
         f state expr

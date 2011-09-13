@@ -3,7 +3,7 @@
 open System
 open SoftMemes.Napl
 
-let getType (NaplExpression ((t,_),_)) = t
+let getType {NaplExpression.Annotation = (t,_)} = t
 
 let createTupleType =
     let openTs =

@@ -44,7 +44,7 @@ namespace SoftMemes.Napl.TestApp
             var func = (Func<int, int, string>)((LambdaExpression)ec).Compile();
             Console.WriteLine("Result: {0}", func(42, 52));
 
-            var serialization = SoftMemes.Napl.NaplSerializer.Serialize(et);
+            var serialization = SoftMemes.Napl.NaplSerializer.SerializeExpression(et);
             Console.WriteLine("Serialization: {0}", serialization);
 
             var stream = new MemoryStream();

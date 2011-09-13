@@ -68,6 +68,34 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>NaplParameter.proto</DependentUpon>
     </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplTestCase.cs">
+      <Link>TestRecords\NaplTestCase.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplTestCase.proto</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplTestRecord.cs">
+      <Link>TestRecords\NaplTestRecord.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplTestRecord.proto</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplTestValue.cs">
+      <Link>TestRecords\NaplTestValue.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplTestValue.proto</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\ProtocolBuffers\NaplTestValueType.cs">
+      <Link>TestRecords\NaplTestValueType.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>NaplTestValueType.proto</DependentUpon>
+    </Compile>
     <Compile Include="..\..\ProtocolBuffers\NaplType.cs">
       <Link>NaplType.cs</Link>
       <AutoGen>True</AutoGen>
@@ -104,6 +132,26 @@
       <Link>NaplParameter.proto</Link>
       <Generator>ProtoBufTool</Generator>
       <LastGenOutput>NaplParameter.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplTestCase.proto">
+      <Link>TestRecords\NaplTestCase.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplTestCase.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplTestRecord.proto">
+      <Link>TestRecords\NaplTestRecord.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplTestRecord.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplTestValue.proto">
+      <Link>TestRecords\NaplTestValue.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplTestValue.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\ProtocolBuffers\NaplTestValueType.proto">
+      <Link>TestRecords\NaplTestValueType.proto</Link>
+      <Generator>ProtoBufTool</Generator>
+      <LastGenOutput>NaplTestValueType.cs</LastGenOutput>
     </None>
     <None Include="..\..\ProtocolBuffers\NaplType.proto">
       <Link>NaplType.proto</Link>

@@ -10,9 +10,9 @@ open SoftMemes.Napl.Compilation.TypeCompiler
 
 type LinqExpression = System.Linq.Expressions.Expression
 
-let rec typeCheck (NaplExpression (tag, expr) as expr') =
-    let ret t' expr = NaplExpression ((t',tag), expr)
-    let extract (NaplExpression ((exprT, _), _) as expr) = exprT, expr
+let rec typeCheck ({NaplExpression.Annotation = tag; Expression = expr} as expr') =
+    let ret t' expr = {NaplExpression.Annotation = (t',tag); Expression = expr}
+    let extract ({NaplExpression.Annotation = (exprT, _)} as expr) = exprT, expr
     let typeCheck' = typeCheck >> extract
     match expr with
     | ValueExpression value ->
@@ -39,7 +39,7 @@ let rec typeCheck (NaplExpression (tag, expr) as expr') =
     | LambdaExpression (param, expr) ->
         let exprT, expr' = typeCheck' expr
         ret exprT (LambdaExpression (param, expr'))
-    | ParameterExpression (NaplParameter (t, _) as p) ->
+    | ParameterExpression ({NaplParameter.Type = t} as p) ->
         ret t (ParameterExpression p)
     | ApplyExpression (funcExpr, paramExprs) ->
         let funcT, funcExpr' = typeCheck' funcExpr
@@ -52,16 +52,16 @@ let rec typeCheck (NaplExpression (tag, expr) as expr') =
         | t ->
             typeError expr "function type" paramTs
 
-let private getNativeParam (NaplParameter(pt, pn)) =
+let private getNativeParam {NaplParameter.Type = pt; Name = pn} =
     let nativePt = getNativeType pt
     Expression.Variable(nativePt, pn)
 
-let rec compile env (NaplExpression ((t,_),expr)) : LinqExpression =
+let rec compile env {NaplExpression.Annotation = (t,_); Expression = expr} : LinqExpression =
     let compileOperator = OperatorCompiler.compile (compile env)
     match expr with
     | LambdaExpression (ps, expr) ->
         let nativeParams = ps |> List.map getNativeParam
-        let nativeParamTs = ps |> List.map (fun (NaplParameter (t,_)) -> getNativeType t) 
+        let nativeParamTs = ps |> List.map (fun {NaplParameter.Type = t} -> getNativeType t) 
         let env' =
             List.zip ps nativeParams
             |> List.fold (fun e (k,v) -> Map.add k v e) env            

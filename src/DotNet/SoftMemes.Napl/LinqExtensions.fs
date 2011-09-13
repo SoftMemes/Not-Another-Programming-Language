@@ -28,7 +28,7 @@ module internal LinqConverter =
 
     let paramToNapl (param : ParameterExpression) =
         let t = typeToNapl param.Type
-        NaplParameter (t, param.Name)
+        {NaplParameter.Type = t; Name = param.Name}
 
     let valueToNapl (t : Type) (v : obj) =
         match t with
