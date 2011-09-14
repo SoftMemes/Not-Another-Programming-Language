@@ -1,5 +1,8 @@
 ﻿module SoftMemes.Napl.NaplCompiler
 
+type LinqExpression = System.Linq.Expressions.Expression
+type LinqLambdaExpression = System.Linq.Expressions.LambdaExpression
+
 open SoftMemes.Napl
 open SoftMemes.Napl.Compilation
 open SoftMemes.Napl.Compilation.ErrorReporter
@@ -21,4 +24,10 @@ let TypeCheck e =
 let Compile e =
     referenceCheck Set.empty e
     let typedE = ExpressionCompiler.typeCheck e
-    ExpressionCompiler.compile Map.empty typedE
+    let linqExpr = ExpressionCompiler.compile Map.empty typedE
+    // TODO: Move somewhere sensible or rethink
+    match linqExpr with
+    | :? LinqLambdaExpression as linqLambda -> linqLambda
+    | linqExpr -> LinqExpression.Lambda(linqExpr, [||])
+
+let GetClrType t = TypeCompiler.getNativeType t

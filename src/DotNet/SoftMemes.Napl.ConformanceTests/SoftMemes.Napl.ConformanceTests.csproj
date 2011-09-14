@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5CB55428-0D90-4E32-A193-6D96B888C0B9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SoftMemes.Napl.ConformanceTests</RootNamespace>
+    <AssemblyName>SoftMemes.Napl.ConformanceTests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.1.0.0.280\lib\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="NaplConformanceTests.cs" />
+    <Compile Include="NUnitTestLoader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\testinputs\simple values\boolean false.napltest">
+      <Link>TestRecords\boolean false.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\boolean true.napltest">
+      <Link>TestRecords\boolean true.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\empty string.napltest">
+      <Link>TestRecords\empty string.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\float 0.napltest">
+      <Link>TestRecords\float 0.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\float max.napltest">
+      <Link>TestRecords\float max.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\float min.napltest">
+      <Link>TestRecords\float min.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\integer 0.napltest">
+      <Link>TestRecords\integer 0.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\integer max.napltest">
+      <Link>TestRecords\integer max.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\integer min.napltest">
+      <Link>TestRecords\integer min.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\string with nulls.napltest">
+      <Link>TestRecords\string with nulls.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\string with unicode.napltest">
+      <Link>TestRecords\string with unicode.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\simple values\string.napltest">
+      <Link>TestRecords\string.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SoftMemes.Napl.Compilation\SoftMemes.Napl.Compilation.fsproj">
+      <Project>{044DE991-C25B-4FA8-9A03-B1773C40EE36}</Project>
+      <Name>SoftMemes.Napl.Compilation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl.Runtime\SoftMemes.Napl.Runtime.csproj">
+      <Project>{ABD9E947-6A80-4D66-8FEC-FD8F14351EAD}</Project>
+      <Name>SoftMemes.Napl.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl.Serialization.Proto\SoftMemes.Napl.Serialization.Proto.csproj">
+      <Project>{78AE1A08-DBE7-4E21-80C1-4700D049A891}</Project>
+      <Name>SoftMemes.Napl.Serialization.Proto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl.Serialization\SoftMemes.Napl.Serialization.fsproj">
+      <Project>{48DA931A-95CF-41C3-A019-6EF896EFAAD6}</Project>
+      <Name>SoftMemes.Napl.Serialization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoftMemes.Napl\SoftMemes.Napl.fsproj">
+      <Project>{DEDB48D4-E555-4B67-9C5F-26AAF1FD2356}</Project>
+      <Name>SoftMemes.Napl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

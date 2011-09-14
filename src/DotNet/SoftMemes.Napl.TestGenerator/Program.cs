@@ -28,6 +28,7 @@ namespace SoftMemes.Napl.TestGenerator
                     testRecord.expression = NaplSerializer.SerializeExpression(t.Expression);
                     testRecord.expression_type = NaplSerializer.SerializeType(t.ExpectedExpressionType);
                     testRecord.test_cases.AddRange(t.TestCases.Select(SerializeTestCase));
+                    testRecord.category = t.Category;
                     testRecord.description = t.Description;
                     Serializer.Serialize(naplStream, testRecord);
                 }
@@ -41,6 +42,7 @@ namespace SoftMemes.Napl.TestGenerator
             var res = new Serialization.TestRecords.NaplTestCase();
             res.arguments.AddRange(testCase.Arguments.Select(SerializeTestValue));
             res.expected_result = SerializeTestValue(testCase.ExpectedResult);
+            res.description = testCase.Description;
             return res;
         }
 

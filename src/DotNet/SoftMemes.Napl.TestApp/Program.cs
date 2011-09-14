@@ -38,9 +38,6 @@ namespace SoftMemes.Napl.TestApp
             var ec = NaplCompiler.Compile(e);
             Console.WriteLine("Compiled expression: {0}", ec);
 
-            while (ec.CanReduce) ec = ec.Reduce();
-            Console.WriteLine("Reduced expression: {0}", ec);
-
             var func = (Func<int, int, string>)((LambdaExpression)ec).Compile();
             Console.WriteLine("Result: {0}", func(42, 52));
 

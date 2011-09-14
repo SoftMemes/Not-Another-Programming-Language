@@ -1,23 +1,29 @@
-﻿using System;
-using System.Linq;
-
-namespace SoftMemes.Napl.TestGenerator
+﻿namespace SoftMemes.Napl.TestGenerator
 {
     internal sealed class TestCase
     {
-        private object _expectedResult;
+        private readonly string _description;
+        private readonly object _expectedResult;
         private readonly object[] _arguments;
 
-        public TestCase(object expectedResult, params object[] arguments)
+        public TestCase(
+            string description,
+            object expectedResult,
+            params object[] arguments)
         {
+            _description = description;
             _expectedResult = expectedResult;
             _arguments = arguments;
+        }
+
+        public string Description
+        {
+            get { return _description; }
         }
 
         public object ExpectedResult
         {
             get { return _expectedResult; }
-            set { _expectedResult = value; }
         }
 
         public object[] Arguments
@@ -99,7 +105,7 @@ namespace SoftMemes.Napl.TestGenerator
                 description,
                 NaplExpressionBuilder.BooleanValue(data),
                 NaplType.BooleanType,
-                new[] { new TestCase(data) });
+                new[] { new TestCase(description, data) });
         }
 
         private static TestRecord simpleIntCase(string category, string description, int data)
@@ -109,7 +115,7 @@ namespace SoftMemes.Napl.TestGenerator
                 description,
                 NaplExpressionBuilder.IntegerValue(data),
                 NaplType.IntegerType,
-                new[] { new TestCase(data) });
+                new[] { new TestCase(description, data) });
         }
 
         private static TestRecord simpleFloatCase(string category, string description, double data)
@@ -119,7 +125,7 @@ namespace SoftMemes.Napl.TestGenerator
                 description,
                 NaplExpressionBuilder.FloatValue(data),
                 NaplType.FloatType,
-                new[] { new TestCase(data) });
+                new[] { new TestCase(description, data) });
         }
 
         private static TestRecord simpleStringCase(string category, string description, string data)
@@ -129,7 +135,7 @@ namespace SoftMemes.Napl.TestGenerator
                 description,
                 NaplExpressionBuilder.StringValue(data),
                 NaplType.StringType,
-                new[] { new TestCase(data) });
+                new[] { new TestCase(description, data) });
         }
     }
 }

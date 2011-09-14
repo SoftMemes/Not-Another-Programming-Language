@@ -8,5 +8,6 @@ message NaplTestRecord
 	required NaplType expression_type = 2;
 	repeated NaplTestCase test_cases = 3;
 
-	optional string description = 100;
+	optional string category = 100;
+	optional string description = 101;
 }
