@@ -21,10 +21,20 @@ module internal HashMap =
         | false, _ -> None
 
 module internal LinqConverter =
-    let private typeToNapl =
+    let rec private typeToNapl =
         function
+        | t when t = typeof<bool> -> BooleanType
         | t when t = typeof<string> -> StringType
         | t when t = typeof<int> -> IntegerType
+        | t when t = typeof<float> -> FloatType
+        | t when t.FullName.StartsWith("System.Func`") ->
+            let args =
+                t.GetGenericArguments()
+                |> Seq.map typeToNapl
+                |> List.ofSeq
+            let tret = args |> List.rev |> List.head
+            let ts = args |> List.rev |> List.tail |> List.rev
+            FunctionType (ts, tret)
 
     let paramToNapl (param : ParameterExpression) =
         let t = typeToNapl param.Type
@@ -60,6 +70,8 @@ module internal LinqConverter =
         | :? BinaryExpression as binaryExpr ->
             let opr =
                 match binaryExpr.NodeType with
+                | ExpressionType.Equal -> NaplOperator.EqualsOperator
+                | ExpressionType.NotEqual -> NaplOperator.NotEqualsOperator
                 | ExpressionType.LessThan -> NaplOperator.LessThanOperator
             let leftNaplE = exprToNapl env binaryExpr.Left
             let rightNaplE = exprToNapl env binaryExpr.Right

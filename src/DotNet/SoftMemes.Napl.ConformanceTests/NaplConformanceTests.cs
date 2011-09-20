@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using SoftMemes.Napl.Serialization;
 using SoftMemes.Napl.Serialization.TestRecords;
-using System;
 
 namespace SoftMemes.Napl.ConformanceTests
 {
@@ -24,7 +24,10 @@ namespace SoftMemes.Napl.ConformanceTests
 
             dynamic linqExpressionDyn = linqExpression;
             var linqExpressionDel = (Delegate)linqExpressionDyn.Compile();
-            var res = linqExpressionDel.DynamicInvoke(arguments.ToArray());
+            var res = linqExpressionDel.DynamicInvoke(
+                arguments
+                .Select(GetClrValue)
+                .ToArray());
 
             // TODO: Verify type checking
             // TODO: Verify serialization/deserialization

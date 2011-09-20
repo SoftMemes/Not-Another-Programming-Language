@@ -1,4 +1,6 @@
-﻿namespace SoftMemes.Napl.TestGenerator
+﻿using SoftMemes.Napl.Linq;
+
+namespace SoftMemes.Napl.TestGenerator
 {
     internal sealed class TestCase
     {
@@ -84,21 +86,47 @@
     {
         public static readonly TestRecord[] TestDatas = new[]
         {
-            simpleBoolCase("simple values", "boolean false", false),
-            simpleBoolCase("simple values", "boolean true", true),
-            simpleIntCase("simple values", "integer 0", 0),
-            simpleIntCase("simple values", "integer min", int.MinValue),
-            simpleIntCase("simple values", "integer max", int.MaxValue),
-            simpleFloatCase("simple values", "float 0", 0.0),
-            simpleFloatCase("simple values", "float min", double.MinValue),
-            simpleFloatCase("simple values", "float max", double.MaxValue),
-            simpleStringCase("simple values", "empty string", ""),
-            simpleStringCase("simple values", "string", "Hello world"),
-            simpleStringCase("simple values", "string with nulls", "Hello world\0Hello again."),
-            simpleStringCase("simple values", "string with unicode", "你好，你的世界如何使用Unicode？"),
+            // Simple values ...
+            SimpleBoolRecord("simple values", "boolean false", false),
+            SimpleBoolRecord("simple values", "boolean true", true),
+            SimpleIntRecord("simple values", "integer 0", 0),
+            SimpleIntRecord("simple values", "integer min", int.MinValue),
+            SimpleIntRecord("simple values", "integer max", int.MaxValue),
+            SimpleFloatRecord("simple values", "float 0", 0.0),
+            SimpleFloatRecord("simple values", "float min", double.MinValue),
+            SimpleFloatRecord("simple values", "float max", double.MaxValue),
+            SimpleStringRecord("simple values", "empty string", ""),
+            SimpleStringRecord("simple values", "string", "Hello world"),
+            SimpleStringRecord("simple values", "string with nulls", "Hello world\0Hello again."),
+            SimpleStringRecord("simple values", "string with unicode", "你好，你的世界如何使用Unicode？"),
+
+            // Operators
+            FunctionRecord(
+                "operators",
+                "bool equality",
+                Linq.Expr((bool x1, bool x2) => x1 == x2).ToNapl(),
+                NaplTypeBuilder.Function(
+                    NaplTypeBuilder.Boolean,
+                    new[]{NaplTypeBuilder.Boolean, NaplTypeBuilder.Boolean}),
+                new TestCase("false = false", true, false, false),
+                new TestCase("false = true", false, false, true),
+                new TestCase("true = false", false, true, false),
+                new TestCase("true = true", true, true, true)),
+            FunctionRecord(
+                "operators",
+                "int equality",
+                Linq.Expr((int x1, int x2) => x1 == x2).ToNapl(),
+                NaplTypeBuilder.Function(
+                    NaplTypeBuilder.Boolean,
+                    new[]{NaplTypeBuilder.Integer, NaplTypeBuilder.Integer}),
+                new TestCase("0 = 0", true, 0, 0),
+                new TestCase("0 = 1", false, 0, 1),
+                new TestCase("min = min", true, int.MinValue, int.MinValue),
+                new TestCase("max = max", true, int.MaxValue, int.MaxValue),
+                new TestCase("-1 = 1", false, -1, 1)),
         };
 
-        private static TestRecord simpleBoolCase(string category, string description, bool data)
+        private static TestRecord SimpleBoolRecord(string category, string description, bool data)
         {
             return new TestRecord(
                 category,
@@ -108,7 +136,7 @@
                 new[] { new TestCase(description, data) });
         }
 
-        private static TestRecord simpleIntCase(string category, string description, int data)
+        private static TestRecord SimpleIntRecord(string category, string description, int data)
         {
             return new TestRecord(
                 category,
@@ -118,7 +146,7 @@
                 new[] { new TestCase(description, data) });
         }
 
-        private static TestRecord simpleFloatCase(string category, string description, double data)
+        private static TestRecord SimpleFloatRecord(string category, string description, double data)
         {
             return new TestRecord(
                 category,
@@ -128,7 +156,7 @@
                 new[] { new TestCase(description, data) });
         }
 
-        private static TestRecord simpleStringCase(string category, string description, string data)
+        private static TestRecord SimpleStringRecord(string category, string description, string data)
         {
             return new TestRecord(
                 category,
@@ -136,6 +164,21 @@
                 NaplExpressionBuilder.StringValue(data),
                 NaplType.StringType,
                 new[] { new TestCase(description, data) });
+        }
+
+        private static TestRecord FunctionRecord<T>(
+            string category,
+            string recordDescription,
+            NaplExpression<T> expression,
+            NaplType expressionType,
+            params TestCase[] cases)
+        {
+            return new TestRecord(
+                category,
+                recordDescription,
+                NaplExpressionBuilder.Untag(expression),
+                expressionType,
+                cases);
         }
     }
 }

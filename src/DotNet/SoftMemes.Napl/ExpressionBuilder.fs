@@ -28,6 +28,21 @@ module NaplExpressionBuilder =
     // Control flow
     let If condExpr trueExpr falseExpr = Operator ConditionOperator [condExpr;trueExpr;falseExpr]
 
+    let rec Untag {NaplExpression.Expression = expr} =
+        let expr' =
+            match expr with
+            | LambdaExpression (param, expr) ->
+                LambdaExpression (param, Untag expr)
+            | ValueExpression v -> ValueExpression v
+            | ParameterExpression p -> ParameterExpression p
+            | OperatorExpression (opr, exprs) ->
+                OperatorExpression (opr, exprs |> List.map Untag)
+            | ApplyExpression (funcExpr, exprs) ->
+                ApplyExpression (Untag funcExpr, exprs |> List.map Untag)
+            | InstantiateExpression (t, exprs) ->
+                InstantiateExpression (t, exprs |> List.map Untag)
+        {NaplExpression.Expression = expr'; Annotation = Unit.Empty}
+
 module TaggedNaplExpressionBuilder =
     let private Tag e t = { NaplExpression.Annotation = t; Expression = e}
     // Primitive expressions

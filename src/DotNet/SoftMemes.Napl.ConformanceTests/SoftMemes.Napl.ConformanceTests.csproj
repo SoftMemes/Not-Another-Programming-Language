@@ -65,6 +65,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\testinputs\operators\bool equality.napltest">
+      <Link>TestRecords\bool equality.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\..\testinputs\operators\int equality.napltest">
+      <Link>TestRecords\int equality.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\testinputs\simple values\boolean false.napltest">
       <Link>TestRecords\boolean false.napltest</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

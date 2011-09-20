@@ -38,6 +38,7 @@
     <Compile Include="Types.fs" />
     <Compile Include="Operators.fs" />
     <Compile Include="Expressions.fs" />
+    <Compile Include="TypeBuilder.fs" />
     <Compile Include="ExpressionBuilder.fs" />
     <Compile Include="ExpressionVisitor.fs" />
     <Compile Include="LinqExtensions.fs" />

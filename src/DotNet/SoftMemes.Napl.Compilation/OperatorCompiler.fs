@@ -20,7 +20,7 @@ let typeCheck expr opr ts =
         | _ -> typeError expr "[bool,<T1>,<T2>] where t1 = t2" ts
     | EqualityOperator ->
         match ts with
-        | [t1;t2] when t1 = t2 -> t1
+        | [t1;t2] when t1 = t2 -> BooleanType
         | _ -> typeError expr "[<T1>,<T2>] where t1 = t2" ts
     | OrderingOperator ->
         match ts with
