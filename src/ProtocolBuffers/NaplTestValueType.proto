@@ -5,4 +5,5 @@ enum NaplTestValueType
 	IntegerTestValueType = 3;
 	FloatTestValueType = 4;
 	TupleTestValueType = 5;
+	FunctionTestValueType = 6;
 }

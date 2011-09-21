@@ -1,3 +1,4 @@
+import "NaplExpression.proto";
 import "NaplTestValueType.proto";
 
 message NaplTestValue
@@ -7,5 +8,6 @@ message NaplTestValue
 	optional int32 integer_value = 3;
 	optional double float_value = 4;
 	optional string string_value = 5;
-	repeated NaplTestValue sub_values = 6;
+	optional NaplExpression expression_value = 6;
+	repeated NaplTestValue sub_values = 7;
 }
