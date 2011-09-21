@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq.Expressions;
-using SoftMemes.Napl;
 using SoftMemes.Napl.Linq;
 
 namespace SoftMemes.Napl.TestApp
@@ -24,7 +23,7 @@ namespace SoftMemes.Napl.TestApp
             //var e = Expression.Lambda(new[] { p1, p2 }, eif);
 
             Expression<Func<int, int, string>> le = (p1, p2) => p1 < p2 ? "Yep!" : "Nope :(";
-            var e = le.ToNapl();
+            var e = le.ToNaplExpression();
 
             Console.WriteLine(
                 "Parsed expression: {0}",
@@ -35,17 +34,17 @@ namespace SoftMemes.Napl.TestApp
                 "Type checked expression: {0}",
                 PrettyPrinter.PrintExpression(et));
 
-            var ec = NaplCompiler.Compile(e);
+            var ec = NaplCompiler.CompileToLinq(e);
             Console.WriteLine("Compiled expression: {0}", ec);
 
-            var func = (Func<int, int, string>)((LambdaExpression)ec).Compile();
+            var func = (Func<int, int, string>)ec.Compile();
             Console.WriteLine("Result: {0}", func(42, 52));
 
-            var serialization = SoftMemes.Napl.NaplSerializer.SerializeExpression(et);
+            var serialization = NaplSerializer.SerializeExpression(et);
             Console.WriteLine("Serialization: {0}", serialization);
 
             var stream = new MemoryStream();
-            ProtoBuf.Serializer.Serialize<Serialization.NaplExpression>(stream, serialization);
+            ProtoBuf.Serializer.Serialize(stream, serialization);
 
             Console.ReadLine();
         }

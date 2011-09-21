@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ProtoBuf;
+using SoftMemes.Napl.Serialization.TestRecords;
 
 namespace SoftMemes.Napl.TestGenerator
 {
@@ -24,7 +25,7 @@ namespace SoftMemes.Napl.TestGenerator
 
                 using (var naplStream = File.Open(filename, FileMode.Create))
                 {
-                    var testRecord = new Serialization.TestRecords.NaplTestRecord();
+                    var testRecord = new NaplTestRecord();
                     testRecord.expression = NaplSerializer.SerializeExpression(t.Expression);
                     testRecord.expression_type = NaplSerializer.SerializeType(t.ExpectedExpressionType);
                     testRecord.test_cases.AddRange(t.TestCases.Select(SerializeTestCase));
@@ -37,47 +38,61 @@ namespace SoftMemes.Napl.TestGenerator
             return 0;
         }
 
-        private static Serialization.TestRecords.NaplTestCase SerializeTestCase(TestCase testCase)
+        private static NaplTestCase SerializeTestCase(TestCase testCase)
         {
-            var res = new Serialization.TestRecords.NaplTestCase();
+            var res = new NaplTestCase();
             res.arguments.AddRange(testCase.Arguments.Select(SerializeTestValue));
             res.expected_result = SerializeTestValue(testCase.ExpectedResult);
             res.description = testCase.Description;
             return res;
         }
 
-        private static Serialization.TestRecords.NaplTestValue SerializeTestValue(object value)
+        private static NaplTestValue SerializeTestValue(object value)
         {
             if (value is bool)
             {
-                return new Serialization.TestRecords.NaplTestValue
+                return new NaplTestValue
                 {
-                    value_type = Serialization.TestRecords.NaplTestValueType.BooleanTestValueType,
+                    value_type = NaplTestValueType.BooleanTestValueType,
                     boolean_value = (bool)value,
                 };
             }
             else if (value is int)
             {
-                return new Serialization.TestRecords.NaplTestValue
+                return new NaplTestValue
                 {
-                    value_type = Serialization.TestRecords.NaplTestValueType.IntegerTestValueType,
+                    value_type = NaplTestValueType.IntegerTestValueType,
                     integer_value = (int)value,
                 };
             }
             else if (value is double)
             {
-                return new Serialization.TestRecords.NaplTestValue
+                return new NaplTestValue
                 {
-                    value_type = Serialization.TestRecords.NaplTestValueType.FloatTestValueType,
+                    value_type = NaplTestValueType.FloatTestValueType,
                     float_value = (double)value,
                 };
             }
             else if (value is string)
             {
-                return new Serialization.TestRecords.NaplTestValue
+                return new NaplTestValue
                 {
-                    value_type = Serialization.TestRecords.NaplTestValueType.StringTestValueType,
+                    value_type = NaplTestValueType.StringTestValueType,
                     string_value = (string)value,
+                };
+            }
+            else if (value.GetType().IsGenericType
+                     && value.GetType().GetGenericTypeDefinition() == typeof(NaplExpression<>))
+            {
+                var serializeMethod =
+                    typeof(NaplSerializer)
+                    .GetMethod("SerializeExpression")
+                    .MakeGenericMethod(value.GetType().GetGenericArguments()[0]);
+
+                return new NaplTestValue
+                {
+                    value_type = NaplTestValueType.FunctionTestValueType,
+                    expression_value = (Serialization.NaplExpression)serializeMethod.Invoke(null, new[]{value}),
                 };
             }
             else

@@ -22,9 +22,7 @@ namespace SoftMemes.Napl.ConformanceTests
             var expressionClrType = NaplCompiler.GetClrType(naplExpressionType);
             var linqExpression = NaplCompiler.Compile(naplExpression);
 
-            dynamic linqExpressionDyn = linqExpression;
-            var linqExpressionDel = (Delegate)linqExpressionDyn.Compile();
-            var res = linqExpressionDel.DynamicInvoke(
+            var res = linqExpression.DynamicInvoke(
                 arguments
                 .Select(GetClrValue)
                 .ToArray());
@@ -48,6 +46,9 @@ namespace SoftMemes.Napl.ConformanceTests
                     return naplValue.string_value;
                 case NaplTestValueType.TupleTestValueType:
                     throw new NotSupportedException();
+                case NaplTestValueType.FunctionTestValueType:
+                    return NaplCompiler.Compile(
+                        NaplSerializer.DeserializeExpression(naplValue.expression_value));
                 default:
                     throw new ArgumentException();
             }

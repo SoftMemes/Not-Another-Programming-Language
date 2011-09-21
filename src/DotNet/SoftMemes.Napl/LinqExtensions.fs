@@ -21,12 +21,18 @@ module internal HashMap =
         | false, _ -> None
 
 module internal LinqConverter =
-    let rec private typeToNapl =
+    let rec typeToNapl =
         function
         | t when t = typeof<bool> -> BooleanType
         | t when t = typeof<string> -> StringType
         | t when t = typeof<int> -> IntegerType
         | t when t = typeof<float> -> FloatType
+        | t when t.FullName.StartsWith("System.Tuple`") ->
+            let ts =
+                t.GetGenericArguments()
+                |> Seq.map typeToNapl
+                |> List.ofSeq
+            TupleType ts
         | t when t.FullName.StartsWith("System.Func`") ->
             let args =
                 t.GetGenericArguments()
@@ -61,27 +67,32 @@ module internal LinqConverter =
             Seq.zip lambdaExpr.Parameters naplParams
             |> Seq.iter (fun (p,naplP) -> HashMap.add p naplP env)
             let naplBody = exprToNapl env lambdaExpr.Body
-            expr |> Napl.Lambda naplParams naplBody
+            Napl.Lambda (naplParams, naplBody, expr)
         | :? ConditionalExpression as condExpr ->
             let naplTestE = exprToNapl env condExpr.Test
             let naplTrueE = exprToNapl env condExpr.IfTrue
             let naplFalseE = exprToNapl env condExpr.IfFalse
-            expr |> Napl.If naplTestE naplTrueE naplFalseE
+            Napl.If (naplTestE, naplTrueE, naplFalseE, expr)
         | :? BinaryExpression as binaryExpr ->
             let opr =
                 match binaryExpr.NodeType with
                 | ExpressionType.Equal -> NaplOperator.EqualsOperator
                 | ExpressionType.NotEqual -> NaplOperator.NotEqualsOperator
                 | ExpressionType.LessThan -> NaplOperator.LessThanOperator
+                | ExpressionType.Multiply -> NaplOperator.MultiplyOperator
             let leftNaplE = exprToNapl env binaryExpr.Left
             let rightNaplE = exprToNapl env binaryExpr.Right
-            expr |> Napl.BinaryOperator opr leftNaplE rightNaplE
+            Napl.BinaryOperator (opr, leftNaplE, rightNaplE, expr)
         | :? ConstantExpression as constExpr ->
             let value = valueToNapl constExpr.Type constExpr.Value
-            expr |> Napl.Value value
+            Napl.Value (value, expr)
         | :? ParameterExpression as paramExpr ->
             let naplParam = HashMap.find paramExpr env
-            expr |> Napl.Parameter naplParam
+            Napl.Parameter (naplParam, expr)
+        | :? InvocationExpression as invExpr ->
+            let fbody = exprToNapl env invExpr.Expression
+            let args = invExpr.Arguments |> List.ofSeq |> List.map (exprToNapl env)
+            Napl.Apply (fbody, args, expr)
         | expr -> notSupported expr
 
 open System.Runtime.CompilerServices
@@ -89,4 +100,7 @@ open System.Runtime.CompilerServices
 [<Extension>]
 module LinqExtensions =
     [<Extension>]   
-    let ToNapl(expr : Expression) = LinqConverter.exprToNapl (Dictionary()) expr
+    let ToNaplExpression (expr : Expression) = LinqConverter.exprToNapl (Dictionary()) expr
+
+    [<Extension>]   
+    let ToNaplType (t : Type) = LinqConverter.typeToNapl t

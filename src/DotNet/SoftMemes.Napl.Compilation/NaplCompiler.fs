@@ -21,7 +21,7 @@ let TypeCheck e =
     referenceCheck Set.empty e
     ExpressionCompiler.typeCheck e
 
-let Compile e =
+let CompileToLinq e =
     referenceCheck Set.empty e
     let typedE = ExpressionCompiler.typeCheck e
     let linqExpr = ExpressionCompiler.compile Map.empty typedE
@@ -29,5 +29,16 @@ let Compile e =
     match linqExpr with
     | :? LinqLambdaExpression as linqLambda -> linqLambda
     | linqExpr -> LinqExpression.Lambda(linqExpr, [||])
+
+let Compile e =
+    referenceCheck Set.empty e
+    let typedE = ExpressionCompiler.typeCheck e
+    let linqExpr = ExpressionCompiler.compile Map.empty typedE
+    // TODO: Move somewhere sensible or rethink
+    let linqExpr =
+        match linqExpr with
+        | :? LinqLambdaExpression as linqLambda -> linqLambda
+        | linqExpr -> LinqExpression.Lambda(linqExpr, [||])
+    linqExpr.Compile()
 
 let GetClrType t = TypeCompiler.getNativeType t

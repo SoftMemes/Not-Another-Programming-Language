@@ -65,6 +65,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\testinputs\higher order functions\single function argument.napltest">
+      <Link>TestRecords\single function argument.napltest</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\..\testinputs\operators\bool equality.napltest">
       <Link>TestRecords\bool equality.napltest</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

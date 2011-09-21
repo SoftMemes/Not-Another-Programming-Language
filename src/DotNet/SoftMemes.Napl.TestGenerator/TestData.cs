@@ -1,4 +1,5 @@
-﻿using SoftMemes.Napl.Linq;
+﻿using System;
+using SoftMemes.Napl.Linq;
 
 namespace SoftMemes.Napl.TestGenerator
 {
@@ -104,10 +105,8 @@ namespace SoftMemes.Napl.TestGenerator
             FunctionRecord(
                 "operators",
                 "bool equality",
-                Linq.Expr((bool x1, bool x2) => x1 == x2).ToNapl(),
-                NaplTypeBuilder.Function(
-                    NaplTypeBuilder.Boolean,
-                    new[]{NaplTypeBuilder.Boolean, NaplTypeBuilder.Boolean}),
+                Linq.Expr((bool x1, bool x2) => x1 == x2).ToNaplExpression(),
+                typeof(Func<bool, bool, bool>).ToNaplType(),
                 new TestCase("false = false", true, false, false),
                 new TestCase("false = true", false, false, true),
                 new TestCase("true = false", false, true, false),
@@ -115,15 +114,21 @@ namespace SoftMemes.Napl.TestGenerator
             FunctionRecord(
                 "operators",
                 "int equality",
-                Linq.Expr((int x1, int x2) => x1 == x2).ToNapl(),
-                NaplTypeBuilder.Function(
-                    NaplTypeBuilder.Boolean,
-                    new[]{NaplTypeBuilder.Integer, NaplTypeBuilder.Integer}),
+                Linq.Expr((int x1, int x2) => x1 == x2).ToNaplExpression(),
+                typeof(Func<int, int, bool>).ToNaplType(),
                 new TestCase("0 = 0", true, 0, 0),
                 new TestCase("0 = 1", false, 0, 1),
                 new TestCase("min = min", true, int.MinValue, int.MinValue),
                 new TestCase("max = max", true, int.MaxValue, int.MaxValue),
                 new TestCase("-1 = 1", false, -1, 1)),
+
+            // Higher order functions
+            FunctionRecord(
+                "higher order functions",
+                "single function argument",
+                Linq.Expr((int x, Func<int,int> f) => 2 * f(x)).ToNaplExpression(),
+                typeof(Func<Func<int, int>, int, int>).ToNaplType(),
+                new TestCase("id function", 16, 8, Linq.Expr((int x) => x).ToNaplExpression())),
         };
 
         private static TestRecord SimpleBoolRecord(string category, string description, bool data)
